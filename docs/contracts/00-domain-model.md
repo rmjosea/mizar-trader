@@ -13,6 +13,23 @@ human approval and updating all dependents in the same change (`AGENTS.md`).
   reinterpret a missing value as zero.
 - Every persisted record carries `schema_version`.
 
+## Glossary
+
+Use exactly these terms in specs, code and reports.
+
+| Term | Meaning |
+|---|---|
+| Sleeve | A market group reported separately: US equities and ETFs, or spot crypto. |
+| Observation | One market data record (bar, trade or quote) with its timestamps. |
+| Snapshot | Immutable, hashed set of point-in-time inputs for one decision time. |
+| Decision | A strategy's proposal for one instrument: `TARGET`, `HOLD` or `ABSTAIN`. |
+| Order intent | A sized buy or sell derived from a decision, waiting for risk approval. |
+| Risk verdict | The risk gate's approval, reduction or rejection of an intent, with reasons. |
+| Fill | A modeled execution of an approved virtual order. |
+| Run | One backtest or forward execution, identified by `run_id`. |
+| Arm | One strategy configuration compared in an experiment. |
+| Available at | The earliest time a value may influence a decision (`available_at`). |
+
 ## Identifiers
 
 - `instrument_id = {venue}:{asset_class}:{symbol}:{quote_currency}` with

@@ -19,6 +19,8 @@
 - [ ] `Decimal` money; missing values not coerced to zero
 - [ ] Idempotent effects and replay
 - [ ] Untrusted text never reaches commands or execution
+- [ ] No test, fixture, threshold, metric or experiment criterion weakened to pass
+- [ ] Docstrings and comments follow docs/engineering/code-documentation.md
 - [ ] Not applicable (documentation or tooling only)
 - [ ] Backlog status and affected docs updated
 

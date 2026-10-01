@@ -1,25 +1,31 @@
 # Documentation map
 
+Contracts and decision records here are **binding**. Everything else is the
+**baseline design**: the agreed starting point for writing specs, not the full
+list of what Mizar Trader will build. Approved specs in
+[`specs/`](../specs/README.md) define what is built; when a spec extends or
+changes the baseline, the affected document is updated in the same change.
+
 Load documents on demand. Start from the backlog task you are working on and
 follow its links; do not read the whole tree.
 
 ## Authority order
 
-When documents disagree, the higher entry wins and the lower one must be fixed
-in the same change:
+When two sources disagree, the higher one wins. Never resolve a conflict
+silently: fix the lower source in the same change, or stop and ask when the
+higher source looks wrong.
 
 1. Code, tests and executable checks (observed behavior).
-2. [`AGENTS.md`](../AGENTS.md) — invariants and process.
-3. [`decisions/`](decisions/) — accepted architecture decisions (ADRs).
-4. [`contracts/`](contracts/) — canonical schemas, events and interfaces.
-5. [`domains/`](domains/) — behavior and acceptance per bounded area.
-6. [`architecture/`](architecture/) and [`product/`](product/) — system shape
-   and scope.
-7. [`delivery/`](delivery/) and [`research/`](research/) — sequencing, gates
-   and methodology.
+2. [`AGENTS.md`](../AGENTS.md): rules and process.
+3. [`decisions/`](decisions/): accepted architecture decisions (ADRs).
+4. [`contracts/`](contracts/): canonical schemas, events and interfaces.
+5. Approved specs in [`specs/`](../specs/README.md).
+6. Baseline design: [`domains/`](domains/), [`architecture/`](architecture/),
+   [`product/`](product/), [`delivery/`](delivery/) and
+   [`research/`](research/).
 
-Approved specs in [`specs/`](../specs/README.md) refine a backlog task and rank
-with domains.
+A spec that needs to change a contract or an ADR must amend it first, with
+explicit human approval.
 
 ## Index
 
@@ -49,7 +55,8 @@ with domains.
 | Delivery | [01-backlog](delivery/01-backlog.md) | choosing or scoping a task |
 | Delivery | [02-release-gates](delivery/02-release-gates.md) | closing a milestone |
 | Delivery | [03-test-strategy](delivery/03-test-strategy.md) | choosing test levels |
-| Engineering | [standards](engineering/standards.md) | writing any code |
+| Engineering | [python-and-ai](engineering/python-and-ai.md) | writing any application code |
+| Engineering | [code-documentation](engineering/code-documentation.md) | writing docstrings or comments |
 | Research | [00-research-protocol](research/00-research-protocol.md) | designing or evaluating an experiment |
 | Research | [01-external-code-and-sources](research/01-external-code-and-sources.md) | adopting external code, data or models |
 

@@ -5,6 +5,7 @@
     "pr": "",
     "sessionUrl": false
   },
+  "includeGitInstructions": false,
   "permissions": {
     "allow": [
       "Bash(python3 scripts/check_harness.py)",

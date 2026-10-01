@@ -14,18 +14,18 @@ execution assumptions?
 
 ## How this repository is built
 
-Development follows an agentic SDLC: AI agents implement one backlog task at a
-time under the contract in [`AGENTS.md`](AGENTS.md), using the skills in
-[`.claude/skills/`](.claude/skills/):
+Development follows an agentic workflow. Any coding agent (Claude Code, Codex
+and others) implements one backlog task at a time under the single contract in
+[`AGENTS.md`](AGENTS.md), using portable skills in
+[`.agents/skills/`](.agents/skills/):
 
 ```text
 shape-idea -> write-spec -> plan -> decompose-tasks -> implement -> review
 ```
 
 High-risk changes (contracts, ledger, risk, execution, scheduling, security)
-require an independent review by a fresh agent
-([`.claude/agents/independent-reviewer.md`](.claude/agents/independent-reviewer.md))
-or a human. Commits are authored by the human operator only.
+require an independent review by an agent that did not write the change, or by
+a human. Commits are authored by the human operator only.
 
 ## Where to start
 
@@ -40,10 +40,11 @@ or a human. Commits are authored by the human operator only.
 ## Repository layout
 
 ```text
-AGENTS.md            agent contract (CLAUDE.md imports it)
-.claude/             skills, subagents and settings for Claude Code
-docs/                product, architecture, contracts, domains, delivery, research
-specs/               approved product specifications per backlog task
+AGENTS.md            the only always-loaded agent contract
+.agents/skills/      portable Agent Skills (source of truth)
+.claude/             Claude Code settings, subagents, and links to the skills
+docs/                binding contracts and ADRs, plus the baseline design
+specs/               approved specifications, one per backlog task
 examples/            reference contracts (fixtures, not results)
 scripts/             repository checks
 tests/harness/       tests for the repository checks

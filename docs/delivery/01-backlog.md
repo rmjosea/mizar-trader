@@ -1,7 +1,12 @@
 # Backlog
 
-The single ordered source of delivery work. One task ID per branch and PR
+The ordered list of delivery work. It starts from the baseline design and grows
+as specs add or split tasks. One task ID per branch and pull request
 (`AGENTS.md`). A task may start only when all its dependencies are `done`.
+
+- **New tasks** get the next free ID in their area letter (for example `D06`),
+  are confirmed by the operator, and are added here in the change that needs
+  them.
 
 - **Status**: `todo`, `in-progress`, `done`. Update it in the PR that changes
   it.
