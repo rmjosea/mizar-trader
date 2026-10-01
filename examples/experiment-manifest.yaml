@@ -1,0 +1,15 @@
+# Example configuration only; it implies no performance result.
+schema_version: "1"
+experiment_id: demo-offline-001
+mode: BACKTEST
+hypothesis: Momentum with a volatility cap beats cash and buy-and-hold net of costs.
+universe: [NASDAQ:equity:AAPL:USD, COINBASE:crypto_spot:BTC:USD]
+splits: {train: [2021-01-01, 2023-12-31], validate: [2024-01-01, 2024-12-31]}
+starting_cash: {amount: "10000.00", currency: USD}
+strategies: [cash_baseline, quant_momentum]
+model_provider: null
+fees_config_version: provisional-v1
+risk_policy_version: provisional-v1
+data_snapshot_hash: fixture-only
+seed: 42
+success_criteria: Preregistered before viewing validation results.
