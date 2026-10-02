@@ -7,6 +7,8 @@ depends_on: []
 
 # <Capability name>
 
+<One or two sentences: what this spec makes true and why it matters.>
+
 ## Context
 
 <Why this matters now. Link the backlog task and the baseline docs used.>

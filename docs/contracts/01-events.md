@@ -1,5 +1,8 @@
 # Events and temporal semantics (v1)
 
+The binding event envelope, the timestamps that decide when data may be
+used, and the replay invariants.
+
 ## Envelope
 
 | Field | Meaning |

@@ -1,7 +1,5 @@
 # Quantitative baselines
 
-## Purpose
-
 Provide preregistered reference strategies every AI arm must beat net of costs.
 
 ## Baselines

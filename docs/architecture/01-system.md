@@ -1,5 +1,8 @@
 # System architecture
 
+How Mizar Trader is split into processes and modules, which module owns what,
+and the rules that cross every module.
+
 ## Shape
 
 Modular monolith ([ADR-0001](../decisions/0001-modular-monolith.md)):

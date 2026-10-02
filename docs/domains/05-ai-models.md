@@ -1,7 +1,5 @@
 # AI models and strategies
 
-## Purpose
-
 Let reasoning LLMs, Jev and optional ML models propose decisions through a
 provider-neutral, replayable, budget-bounded adapter, without ever executing.
 

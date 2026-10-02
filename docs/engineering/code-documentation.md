@@ -8,6 +8,16 @@ without repeating the code or embedding project-management history.
 comments; Ruff's `D` rules (Google convention) enforce Python docstrings once
 backlog task F01 configures them.
 
+## Contents
+
+- Python docstrings
+- Tests
+- TypeScript and JavaScript
+- Other files
+- Inline comments
+- Prohibitions
+- References
+
 ## Python docstrings
 
 Google style, PEP 257 baseline, English only.

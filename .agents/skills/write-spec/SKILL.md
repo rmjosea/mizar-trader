@@ -32,6 +32,8 @@ implementation choices unless they are confirmed constraints.
 
 ## Writing rules
 
+- Follow [`docs/engineering/writing-for-agents.md`](../../../docs/engineering/writing-for-agents.md):
+  summary first, self-contained sections, link instead of copying.
 - Keep a spec to one to three pages. Split it when it holds two independent
   outcomes, never by technical layer.
 - Give every requirement a stable ID (`REQ-001`). Never renumber an ID that a

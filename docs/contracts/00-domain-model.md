@@ -3,6 +3,13 @@
 Canonical entities shared by every module. Changing this file requires explicit
 human approval and updating all dependents in the same change (`AGENTS.md`).
 
+## Contents
+
+- Global rules
+- Glossary
+- Identifiers
+- Entities
+
 ## Global rules
 
 - All timestamps are timezone-aware UTC. `available_at` is the earliest moment

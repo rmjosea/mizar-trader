@@ -1,5 +1,7 @@
 # Vision and scope
 
+What Mizar Trader is for, what the MVP includes, and what it will never do.
+
 ## Goal
 
 Answer one research question with auditable evidence: **does an AI-derived

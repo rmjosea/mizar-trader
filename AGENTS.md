@@ -143,11 +143,23 @@ author is a self-review; label it so.
 - Traceability IDs belong in specs, plans, commits and pull requests, never in
   source code comments.
 
-## 7. Code and documentation standards
+## 7. Standards
 
 - Code: [`docs/engineering/python-and-ai.md`](docs/engineering/python-and-ai.md).
 - Comments and docstrings: [`docs/engineering/code-documentation.md`](docs/engineering/code-documentation.md).
-  Docstrings are part of the acceptance criteria, not a later cleanup.
+  They are part of the acceptance criteria, not a later cleanup.
+- Any Markdown an agent reads (docs, specs, skills, plans):
+  [`docs/engineering/writing-for-agents.md`](docs/engineering/writing-for-agents.md).
+  The core rules:
+  - **Progressive disclosure.** Keep only what every task needs at the top
+    level. Link deeper detail with the condition for reading it ("Read X when
+    Y"), one level deep.
+  - **Summary first.** Title on line 1, then one to three sentences on what
+    the file is for. Most important rules first.
+  - **One purpose per file, one home per fact.** Link; never copy.
+  - **Self-contained sections.** Name the subject; never write "see above".
+  - **Budgets.** `AGENTS.md` 200 lines, `SKILL.md` 500, other files 300; add a
+    `## Contents` list above 100 lines.
 
 ## 8. Commands
 
@@ -156,9 +168,6 @@ author is a self-review; label it so.
 | Harness and documentation check | `python3 scripts/check_harness.py` |
 | Harness tests | `python3 -m unittest discover -s tests/harness` |
 | App lint, types, tests | defined by backlog task F01; update this table then |
-
-Tests never need network access or paid API keys; live-provider tests are
-opt-in.
 
 ## 9. Git
 

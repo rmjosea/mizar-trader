@@ -1,7 +1,5 @@
 # API and dashboard
 
-## Purpose
-
 Let the operator inspect every decision end to end and stop virtual execution.
 
 ## API

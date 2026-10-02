@@ -1,7 +1,5 @@
 # Virtual execution and accounting
 
-## Purpose
-
 Simulate fills conservatively against observed market data and keep an exact,
 reconcilable double-entry ledger.
 

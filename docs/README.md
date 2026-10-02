@@ -37,6 +37,10 @@ explicit human approval.
 | Architecture | [02-storage-and-operations](architecture/02-storage-and-operations.md) | persistence, recovery, observability |
 | Architecture | [03-local-runtime](architecture/03-local-runtime.md) | Docker, resources, Apple Silicon, cloud runtime |
 | Architecture | [04-security-and-live-boundary](architecture/04-security-and-live-boundary.md) | secrets, auth, external input, execution modes |
+| Decisions | [0001-modular-monolith](decisions/0001-modular-monolith.md) | adding a module, process or service |
+| Decisions | [0002-real-data-virtual-money](decisions/0002-real-data-virtual-money.md) | touching data sources or execution modes |
+| Decisions | [0003-ai-cannot-authorize-execution](decisions/0003-ai-cannot-authorize-execution.md) | connecting model output to risk or execution |
+| Decisions | [0000-template](decisions/0000-template.md) | writing a new decision record |
 | Contracts | [00-domain-model](contracts/00-domain-model.md) | any domain entity or identifier |
 | Contracts | [01-events](contracts/01-events.md) | events, timestamps, replay |
 | Contracts | [02-strategy-plugin](contracts/02-strategy-plugin.md) | writing or calling a strategy |
@@ -57,6 +61,7 @@ explicit human approval.
 | Delivery | [03-test-strategy](delivery/03-test-strategy.md) | choosing test levels |
 | Engineering | [python-and-ai](engineering/python-and-ai.md) | writing any application code |
 | Engineering | [code-documentation](engineering/code-documentation.md) | writing docstrings or comments |
+| Engineering | [writing-for-agents](engineering/writing-for-agents.md) | writing any Markdown an agent will read |
 | Research | [00-research-protocol](research/00-research-protocol.md) | designing or evaluating an experiment |
 | Research | [01-external-code-and-sources](research/01-external-code-and-sources.md) | adopting external code, data or models |
 

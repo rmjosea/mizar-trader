@@ -1,7 +1,5 @@
 # Market data and feed quality
 
-## Purpose
-
 Ingest real US equity and spot crypto observations with full provenance and
 quality flags, historically and prospectively.
 

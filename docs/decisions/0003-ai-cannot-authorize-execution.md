@@ -1,5 +1,8 @@
 # ADR-0003: AI cannot authorize execution
 
+Models and strategies only propose; a deterministic risk engine approves
+orders and only the execution module changes balances.
+
 - Status: accepted
 - Date: 2026-09-25
 
@@ -8,6 +11,12 @@
 Model outputs are non-deterministic, can be manipulated through untrusted
 documents (prompt injection) and are not calibrated. They must not control
 capital, even virtual capital, without a deterministic check.
+
+## Considered options
+
+- **Deterministic risk gate** (chosen): auditable, testable, model-independent.
+- **Model-authorized execution**: simpler pipeline, but non-deterministic,
+  manipulable through prompt injection and uncalibrated.
 
 ## Decision
 

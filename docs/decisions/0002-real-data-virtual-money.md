@@ -1,5 +1,8 @@
 # ADR-0002: Real data, virtual money
 
+Use real observed market data with virtual cash and modeled fills; never
+place real orders.
+
 - Status: accepted
 - Date: 2026-09-25
 
@@ -8,6 +11,15 @@
 The lab must produce credible evidence about strategies without risking
 capital. Synthetic prices hide real feed problems; real orders create
 financial and security risk that the project does not need.
+
+## Considered options
+
+- **Real data, virtual money** (chosen): real feed problems, no capital or
+  credential risk.
+- **Synthetic data**: easy and reproducible, but hides real feed gaps,
+  delays and entitlements.
+- **Live trading with small capital**: real fills, but financial and security
+  risk the research question does not need.
 
 ## Decision
 

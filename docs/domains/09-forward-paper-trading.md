@@ -1,7 +1,5 @@
 # Forward (prospective) paper trading
 
-## Purpose
-
 Run all strategies prospectively on real, current market data with virtual
 money, producing the untouched test that historical results cannot provide.
 

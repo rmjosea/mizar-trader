@@ -1,7 +1,5 @@
 # Historical backtesting
 
-## Purpose
-
 Replay real historical observations event by event with point-in-time
 availability, producing reproducible runs.
 

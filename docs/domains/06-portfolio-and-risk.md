@@ -1,7 +1,5 @@
 # Portfolio and deterministic risk
 
-## Purpose
-
 Keep independent virtual portfolios and make the only, deterministic decision
 on whether an order intent may proceed.
 

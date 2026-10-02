@@ -1,7 +1,5 @@
 # Evaluation and experiment registry
 
-## Purpose
-
 Measure strategies honestly under the preregistered protocol in
 [research/00](../research/00-research-protocol.md).
 

@@ -1,7 +1,5 @@
 # Features and snapshots
 
-## Purpose
-
 Produce reproducible, point-in-time feature and signal snapshots that are the
 only inputs strategies see.
 

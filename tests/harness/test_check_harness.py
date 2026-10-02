@@ -190,6 +190,50 @@ class CheckTest(unittest.TestCase):
         write(self.root, "src/a.py", '"""Summary.\n\n' + "Line.\n" * 7 + '"""\n')
         self.assertReports(check_harness.check_code_comments(self.root), "module docstring")
 
+    def test_document_without_summary_is_reported(self) -> None:
+        write(self.root, "docs/a.md", "# Title\n\n## Section\n\nText.\n")
+        self.assertReports(check_harness.check_document_shape(self.root), "summary")
+
+    def test_document_without_title_is_reported(self) -> None:
+        write(self.root, "docs/a.md", "Text without a title.\n")
+        self.assertReports(check_harness.check_document_shape(self.root), "title")
+
+    def test_long_document_without_contents_is_reported(self) -> None:
+        write(self.root, "docs/a.md", "# Title\n\nSummary.\n\n## Part\n" + "line\n" * 100)
+        self.assertReports(check_harness.check_document_shape(self.root), "Contents")
+
+    def test_spec_frontmatter_is_skipped_before_shape_check(self) -> None:
+        write(self.root, "specs/F02-x/spec.md", "---\nid: SPEC-F02\n---\n# Title\n\nSummary.\n\n## Part\n")
+        self.assertEqual(check_harness.check_document_shape(self.root), [])
+
+    def test_vague_reference_is_reported(self) -> None:
+        write(self.root, "docs/a.md", "# T\n\nAs mentioned above, it fails.\n")
+        self.assertReports(check_harness.check_vague_references(self.root), "vague reference")
+
+    def test_quoted_vague_reference_is_allowed(self) -> None:
+        write(self.root, "docs/a.md", '# T\n\nNever write "see above".\n\n```text\nBad: see above\n```\n')
+        self.assertEqual(check_harness.check_vague_references(self.root), [])
+
+    def test_document_missing_from_index_is_reported(self) -> None:
+        write(self.root, "docs/README.md", "# Map\n\n[a](a.md)\n")
+        write(self.root, "docs/a.md", "# A\n")
+        write(self.root, "docs/sub/b.md", "# B\n")
+        errors = check_harness.check_docs_index(self.root)
+        self.assertEqual(len(errors), 1)
+        self.assertReports(errors, "sub/b.md")
+
+    def test_unlinked_skill_file_is_reported(self) -> None:
+        add_skill(self.root, "a")
+        write(self.root, ".agents/skills/a/references/orphan.md", "# Orphan\n")
+        self.assertReports(check_harness.check_skill_files(self.root), "not linked")
+
+    def test_reference_linking_to_reference_is_reported(self) -> None:
+        add_skill(self.root, "a", "name: a\ndescription: Does a thing.")
+        skill = self.root / ".agents/skills/a/SKILL.md"
+        skill.write_text(skill.read_text() + "Read [r](references/r.md) and [s](references/s.md) when needed.\n")
+        write(self.root, ".agents/skills/a/references/r.md", "# R\n\nRead [s](s.md).\n")
+        write(self.root, ".agents/skills/a/references/s.md", "# S\n")
+        self.assertReports(check_harness.check_skill_files(self.root), "one level deep")
 
 if __name__ == "__main__":
     unittest.main()

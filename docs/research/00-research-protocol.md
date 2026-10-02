@@ -1,5 +1,8 @@
 # Research protocol (v1)
 
+The binding method for comparing strategies: arms, data splits,
+preregistration, reporting and promotion criteria.
+
 ## Question
 
 Does an AI-derived signal improve risk-adjusted **net** results versus

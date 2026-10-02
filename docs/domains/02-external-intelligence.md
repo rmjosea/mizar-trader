@@ -1,7 +1,5 @@
 # External intelligence (news, macro, filings, social)
 
-## Purpose
-
 Turn timestamped public information into point-in-time, provenance-linked
 signals that strategies may use as research features.
 

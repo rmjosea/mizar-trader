@@ -29,6 +29,8 @@ Build the smallest reusable procedure that measurably changes agent behavior.
 
 ## Rules
 
+- Follow [`docs/engineering/writing-for-agents.md`](../../../docs/engineering/writing-for-agents.md);
+  this skill only adds what is specific to skills.
 - Frontmatter only uses portable keys: `name`, `description`, and optionally
   `license`, `compatibility`, `metadata`, `allowed-tools`.
 - `name`: lowercase letters, digits and hyphens; at most 64 characters; equal

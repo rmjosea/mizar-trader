@@ -34,6 +34,7 @@ otherwise `self-review`. High-risk work with only a self-review gets `blocked`.
   criterion was weakened to pass.** Compare test changes with code changes.
 - Data integrity, compatibility, error handling and observability.
 - Docstrings and comments follow `docs/engineering/code-documentation.md`.
+- Changed Markdown follows `docs/engineering/writing-for-agents.md`.
 
 Read [references/trading-invariants.md](references/trading-invariants.md)
 whenever the change touches market data, features, strategies, models, risk,

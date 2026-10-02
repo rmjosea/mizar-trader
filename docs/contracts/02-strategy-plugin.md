@@ -1,5 +1,8 @@
 # Strategy plugin contract (v1)
 
+The binding interface every strategy implements, what it may receive, and
+what it must never do.
+
 ## Interface
 
 ```python

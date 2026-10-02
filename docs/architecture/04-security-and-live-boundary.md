@@ -1,5 +1,8 @@
 # Security and live-execution boundary
 
+The security rules and the hard boundary that keeps Mizar Trader from ever
+placing a real order.
+
 ## Execution boundary
 
 - The execution-mode enum contains only `BACKTEST` and `PAPER`.

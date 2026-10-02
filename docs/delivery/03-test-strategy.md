@@ -1,5 +1,8 @@
 # Test strategy
 
+Which kinds of tests Mizar Trader uses, what each one covers, and the rules
+every test follows.
+
 | Level | Covers | Notes |
 |---|---|---|
 | Unit | schemas, indicators, risk rules, `Decimal` ledger, event ordering | fast, no I/O |

@@ -1,5 +1,8 @@
 # Storage, operations and observability
 
+Where data is persisted, how the system recovers after a restart, and what
+it must observe and alert on.
+
 ## Persistence
 
 - **PostgreSQL**: instruments, provider cursors, canonical observations,

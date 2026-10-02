@@ -1,5 +1,8 @@
 # ADR-0001: Modular monolith
 
+Build Mizar Trader as one modular codebase with an API process and a worker
+process, not as microservices.
+
 - Status: accepted
 - Date: 2026-09-25
 
@@ -9,6 +12,12 @@ The system has many bounded areas (market data, intelligence, features,
 strategies, portfolio, risk, execution, evaluation, API) but one operator and
 one deployment target. Independent contracts matter; independent deployment
 does not.
+
+## Considered options
+
+- **Modular monolith** (chosen): enforced module boundaries, one deployment.
+- **Microservices**: independent deployment, but network, queue and
+  operations overhead with no current need. Deferred.
 
 ## Decision
 
