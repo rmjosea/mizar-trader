@@ -11,7 +11,8 @@ production code.
 ## Steps
 
 1. Read the source intent (spec or backlog row), the contracts it touches,
-   [`docs/engineering/python-and-ai.md`](../../../docs/engineering/python-and-ai.md)
+   [`docs/engineering/python.md`](../../../docs/engineering/python.md)
+   (plus [`ai-model-code.md`](../../../docs/engineering/ai-model-code.md) when models are involved)
    and the relevant code and tests.
 2. Separate four lists: repository facts, confirmed constraints, assumptions,
    open choices.

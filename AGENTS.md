@@ -145,7 +145,8 @@ author is a self-review; label it so.
 
 ## 7. Standards
 
-- Code: [`docs/engineering/python-and-ai.md`](docs/engineering/python-and-ai.md).
+- Python: [`docs/engineering/python.md`](docs/engineering/python.md); code that calls
+  models also: [`docs/engineering/ai-model-code.md`](docs/engineering/ai-model-code.md).
 - Comments and docstrings: [`docs/engineering/code-documentation.md`](docs/engineering/code-documentation.md).
   They are part of the acceptance criteria, not a later cleanup.
 - Any Markdown an agent reads (docs, specs, skills, plans):

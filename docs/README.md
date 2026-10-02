@@ -59,7 +59,8 @@ explicit human approval.
 | Delivery | [01-backlog](delivery/01-backlog.md) | choosing or scoping a task |
 | Delivery | [02-release-gates](delivery/02-release-gates.md) | closing a milestone |
 | Delivery | [03-test-strategy](delivery/03-test-strategy.md) | choosing test levels |
-| Engineering | [python-and-ai](engineering/python-and-ai.md) | writing any application code |
+| Engineering | [python](engineering/python.md) | writing any Python code |
+| Engineering | [ai-model-code](engineering/ai-model-code.md) | writing code that calls a language or ML model |
 | Engineering | [code-documentation](engineering/code-documentation.md) | writing docstrings or comments |
 | Engineering | [writing-for-agents](engineering/writing-for-agents.md) | writing any Markdown an agent will read |
 | Research | [00-research-protocol](research/00-research-protocol.md) | designing or evaluating an experiment |
