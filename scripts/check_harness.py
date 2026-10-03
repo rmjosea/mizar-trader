@@ -31,6 +31,9 @@ INSTRUCTION_FILES_THAT_DISABLE_AGENTS_MD = ("CLAUDE.md", ".claude/CLAUDE.md")
 
 CODE_SUFFIXES = {".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".sh", ".yml", ".yaml", ".toml"}
 HASH_COMMENT_SUFFIXES = {".sh", ".yml", ".yaml", ".toml"}
+AI_AUTHOR = r"(?:Claude|Codex|ChatGPT|Copilot|GPT[-\w.]*|Gemini|an? (?:AI|LLM|agent|assistant)|AI)\b"
+AUTHORSHIP_VERB = r"(?:auto-?)?(?:generated|written|authored|created) (?:by|with|using) "
+CODE_SUBJECT = r"(?:file|module|code|class|function|script)"
 FORBIDDEN_IN_COMMENTS = [
     (re.compile(r"\b(?:SPEC|REQ|PLAN|TASK|OD|AC)-[A-Z0-9]"), "workflow ID"),
     (
@@ -40,22 +43,13 @@ FORBIDDEN_IN_COMMENTS = [
     (
         re.compile(
             r"co-authored-by|\bClaude Code\b|\bCodex\b"
-            r"|\b(?:file|module|code|class|function|script) (?:was |is )?(?:auto-?)?"
-            r"(?:generated|written|authored|created) (?:by|with|using)\b"
-            r"|^(?:#|//|--)?\s*(?:auto-?)?generated (?:by|with)\b",
-            re.IGNORECASE,
+            rf"|^\s*(?:#|//|--|/\*|\*)?\s*(?:this (?:{CODE_SUBJECT} )?)?(?:(?:was|is) )?{AUTHORSHIP_VERB}{AI_AUTHOR}"
+            rf"|\b{CODE_SUBJECT} (?:was |is )?{AUTHORSHIP_VERB}{AI_AUTHOR}",
+            re.IGNORECASE | re.MULTILINE,
         ),
         "agent attribution",
     ),
     (re.compile(r"\b(?:TODO|FIXME|XXX)\b"), "TODO marker (open a backlog item)"),
-    (
-        re.compile(
-            r"\b(?:formerly|old version|legacy version|previously (?:used|was|were|returned|did|called|stored))\b"
-            r"|^(?:#|//|--)?\s*previously\b",
-            re.IGNORECASE,
-        ),
-        "history note",
-    ),
 ]
 COMMENT_ONLY_FORBIDDEN = [
     (re.compile(r"^(?:#|//|--|/\*|\*)\s*[-=*#~_]{4,}"), "banner or divider comment"),
@@ -430,7 +424,8 @@ def check_docs_index(root: Path) -> list[str]:
     index_path = root / "docs" / "README.md"
     if not index_path.exists():
         return ["docs/README.md: missing documentation index"]
-    listed = {(index_path.parent / target.split("#", 1)[0]).resolve() for target in LINK.findall(index_path.read_text(encoding="utf-8"))}
+    targets = LINK.findall(index_path.read_text(encoding="utf-8"))
+    listed = {(index_path.parent / target.split("#", 1)[0]).resolve() for target in targets}
     return [
         f"{path.relative_to(root)}: not listed in docs/README.md"
         for path in walk_files(root / "docs", {".md"})
@@ -445,7 +440,8 @@ def check_skill_files(root: Path) -> list[str]:
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.exists():
             continue
-        linked = {(skill_dir / target.split("#", 1)[0]).resolve() for target in LINK.findall(skill_file.read_text(encoding="utf-8"))}
+        targets = LINK.findall(skill_file.read_text(encoding="utf-8"))
+        linked = {(skill_dir / target.split("#", 1)[0]).resolve() for target in targets}
         files = (
             p
             for p in skill_dir.rglob("*")
