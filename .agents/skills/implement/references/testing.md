@@ -21,7 +21,7 @@ Choose tests by risk and observable behavior.
 - **No network or wall clock**: inject the clock and providers; adapters are
   tested against recorded fixtures labeled as fixtures.
 - **Exact money**: assert `Decimal` equality; never approximate floats.
-- **Models**: use the fake or replay adapter; live calls are opt-in tests.
+- **Models**: use the mock or replay adapter; live calls are opt-in tests.
 
 ## Red, green, refactor
 

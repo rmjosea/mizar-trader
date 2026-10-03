@@ -33,11 +33,22 @@ CODE_SUFFIXES = {".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".sh", ".yml", ".y
 HASH_COMMENT_SUFFIXES = {".sh", ".yml", ".yaml", ".toml"}
 FORBIDDEN_IN_COMMENTS = [
     (re.compile(r"\b(?:SPEC|REQ|PLAN|TASK|OD|AC)-[A-Z0-9]"), "workflow ID"),
+    (re.compile(r"\b(?:issue|pr|pull request|ticket)\s*#\s*\d+|(?:^|\s)#\d+\b|\bGH-\d+\b", re.IGNORECASE), "issue reference"),
     (
-        re.compile(r"co-authored-by|(?:generated|written|authored) (?:by|with)|\bClaude Code\b|\bCodex\b", re.IGNORECASE),
+        re.compile(
+            r"co-authored-by|\bClaude Code\b|\bCodex\b"
+            r"|\b(?:generated|written|authored|created) (?:by|with|using) "
+            r"(?:Claude|Codex|ChatGPT|Copilot|GPT|AI|an? (?:AI|LLM|agent|assistant))\b",
+            re.IGNORECASE,
+        ),
         "agent attribution",
     ),
     (re.compile(r"\b(?:TODO|FIXME|XXX)\b"), "TODO marker (open a backlog item)"),
+    (re.compile(r"\b(?:previously|formerly|old version|legacy version)\b", re.IGNORECASE), "history note"),
+]
+COMMENT_ONLY_FORBIDDEN = [
+    (re.compile(r"^(?:#|//|--|/\*|\*)\s*[-=*#~_]{4,}"), "banner or divider comment"),
+    (re.compile(r"^(?:#|//|--)\s*(?:step\s+)?\d+[.)]\s", re.IGNORECASE), "numbered step comment"),
 ]
 MAX_MODULE_DOCSTRING_LINES = 6
 DOC_MAX_LINES = 300
@@ -89,7 +100,7 @@ def check_links(root: Path) -> list[str]:
 def skill_dirs(root: Path) -> list[Path]:
     """Return canonical skill directories under .agents/skills."""
     base = root / ".agents" / "skills"
-    return sorted(p for p in base.iterdir() if p.is_dir()) if base.exists() else []
+    return sorted(p for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")) if base.exists() else []
 
 
 def check_skills(root: Path) -> list[str]:
@@ -128,7 +139,7 @@ def check_skill_links(root: Path) -> list[str]:
     errors = []
     claude_dir = root / ".claude" / "skills"
     canonical = {p.name for p in skill_dirs(root)}
-    linked = {p.name for p in claude_dir.iterdir()} if claude_dir.exists() else set()
+    linked = {p.name for p in claude_dir.iterdir() if not p.name.startswith(".")} if claude_dir.exists() else set()
     for name in sorted(canonical - linked):
         errors.append(f".claude/skills/{name}: missing link to .agents/skills/{name}")
     for name in sorted(linked):
@@ -284,11 +295,11 @@ def check_agent_contract(root: Path) -> list[str]:
     return errors
 
 
-def python_comment_texts(path: Path) -> list[tuple[int, str]]:
-    """Return comments and docstrings of a Python file with their line numbers."""
+def python_comment_texts(path: Path) -> list[tuple[int, str, bool]]:
+    """Return comments and docstrings of a Python file as (line, text, is_comment)."""
     source = path.read_text(encoding="utf-8")
     texts = [
-        (token.start[0], token.string)
+        (token.start[0], token.string, True)
         for token in tokenize.generate_tokens(io.StringIO(source).readline)
         if token.type == tokenize.COMMENT
     ]
@@ -296,11 +307,11 @@ def python_comment_texts(path: Path) -> list[tuple[int, str]]:
         if isinstance(node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
             docstring = ast.get_docstring(node, clean=False)
             if docstring:
-                texts.append((getattr(node, "lineno", 1), docstring))
+                texts.append((getattr(node, "lineno", 1), docstring, False))
     return texts
 
 
-def other_comment_texts(path: Path) -> list[tuple[int, str]]:
+def other_comment_texts(path: Path) -> list[tuple[int, str, bool]]:
     """Return comment lines of non-Python source files."""
     if path.suffix in HASH_COMMENT_SUFFIXES:
         markers: tuple[str, ...] = ("#",)
@@ -312,13 +323,21 @@ def other_comment_texts(path: Path) -> list[tuple[int, str]]:
     for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         stripped = line.strip()
         if stripped.startswith(markers) and not stripped.startswith("#!"):
-            texts.append((number, stripped))
+            texts.append((number, stripped, True))
     return texts
+
+
+def backlog_id_pattern(root: Path) -> re.Pattern[str] | None:
+    """Build a pattern matching the backlog task IDs that exist today."""
+    path = root / "docs" / "delivery" / "01-backlog.md"
+    ids = [row["id"] for row in parse_backlog(path.read_text(encoding="utf-8"))] if path.exists() else []
+    return re.compile(r"\b(?:" + "|".join(ids) + r")\b") if ids else None
 
 
 def check_code_comments(root: Path) -> list[str]:
     """Enforce the code-documentation prohibitions on comments and docstrings."""
     errors = []
+    backlog_ids = backlog_id_pattern(root)
     for path in walk_files(root, CODE_SUFFIXES):
         rel = path.relative_to(root)
         try:
@@ -326,8 +345,11 @@ def check_code_comments(root: Path) -> list[str]:
         except (SyntaxError, UnicodeDecodeError, tokenize.TokenError) as exc:
             errors.append(f"{rel}: cannot parse ({type(exc).__name__})")
             continue
-        for line, text in texts:
-            for pattern, label in FORBIDDEN_IN_COMMENTS:
+        for line, text, is_comment in texts:
+            rules = FORBIDDEN_IN_COMMENTS + (COMMENT_ONLY_FORBIDDEN if is_comment else [])
+            if backlog_ids:
+                rules = [*rules, (backlog_ids, "backlog task ID")]
+            for pattern, label in rules:
                 if pattern.search(text):
                     errors.append(f"{rel}:{line}: {label} in a comment or docstring")
         if path.suffix == ".py":
@@ -413,7 +435,13 @@ def check_skill_files(root: Path) -> list[str]:
         if not skill_file.exists():
             continue
         linked = {(skill_dir / target.split("#", 1)[0]).resolve() for target in LINK.findall(skill_file.read_text(encoding="utf-8"))}
-        for path in sorted(p for p in skill_dir.rglob("*") if p.is_file() and p != skill_file):
+        files = (
+            p
+            for p in skill_dir.rglob("*")
+            if p.is_file() and p != skill_file
+            and not any(part.startswith(".") or part in SKIP_DIRS for part in p.relative_to(skill_dir).parts)
+        )
+        for path in sorted(files):
             rel = path.relative_to(root)
             if path.resolve() not in linked:
                 errors.append(f"{rel}: not linked from {skill_file.relative_to(root)}")

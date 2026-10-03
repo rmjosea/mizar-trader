@@ -49,5 +49,13 @@ results.
 | [FRED API](https://fred.stlouisfed.org/docs/api/fred/) | macro data; track revisions |
 | [Reddit developer terms](https://support.reddithelp.com/hc/en-us/articles/14945211791892-Reddit-Developer-Platform) | use only if permitted |
 
+## Tooling status
+
+| Tool | Status | Checked on |
+|---|---|---|
+| [ty](https://github.com/astral-sh/ty) (type checker) | beta (0.0.x); stable release targeted for 2026 | 2026-10-02 |
+| [`uv audit`](https://astral.sh/blog/uv-audit) (vulnerability scan) | preview since June 2026 | 2026-10-02 |
+| Python 3.13 | bugfix support ended 2026-10-01; security fixes to 2029-10 | 2026-10-02 |
+
 Links were checked on 2026-09-25; Jev status on 2026-10-01. Verify current
 terms, licenses, entitlements and jurisdiction before each integration.

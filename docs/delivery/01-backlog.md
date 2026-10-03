@@ -19,7 +19,7 @@ as specs add or split tasks. One task ID per branch and pull request
 
 | ID | Outcome | Depends | Gate | Risk | Domain | Acceptance | Status |
 |---|---|---|---|---|---|---|---|
-| F01 | uv project, lint/type/test tooling, CI, ARM64 Compose, health endpoint, `make doctor` | — | 0 | medium | [arch/03](../architecture/03-local-runtime.md) | clean local boot on ARM64; CI green without secrets; no live keys; `AGENTS.md` commands updated | todo |
+| F01 | uv project, lint/type/test tooling, CI, ARM64 Compose, health endpoint, `make doctor` | — | 0 | medium | [arch/03](../architecture/03-local-runtime.md) | clean local boot on ARM64; CI green without secrets and on the `.python-version` interpreter; no live keys; `AGENTS.md` commands updated | todo |
 | F02 | Canonical schemas with UTC and `Decimal` validation | F01 | 0 | high | [contracts/00](../contracts/00-domain-model.md) | schema fixtures and negative tests; missing ≠ zero | todo |
 | F03 | Event journal, migrations, outbox and idempotency | F02 | 0 | high | [contracts/01](../contracts/01-events.md) | restart and replay reach the same state | todo |
 | D01 | Instrument registry and trading calendars | F02 | 1 | medium | [01](../domains/01-market-data.md) | equity holiday and crypto 24/7 tests | todo |

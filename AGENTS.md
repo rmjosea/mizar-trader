@@ -115,8 +115,8 @@ risk, execution, scheduling, secrets, dependencies or the live-order boundary.
 
 | Risk | Applies to |
 |---|---|
-| `high` | contracts, event journal, ledger, risk gate, execution and fills, scheduler, security and secrets, adopting external code, changing an experiment after results exist |
-| `medium` | provider adapters, features, strategies, backtester, metrics, model adapters, dependencies |
+| `high` | contracts, event journal, ledger, risk gate, execution and fills, scheduler, security and secrets, a new dependency or external code, changing an experiment after results exist |
+| `medium` | provider adapters, features, strategies, backtester, metrics, model adapters, upgrading an approved dependency |
 | `low` | documentation, read-only dashboard views, developer tooling |
 
 `medium` needs failure-path tests. `high` also needs recovery evidence and an
@@ -159,8 +159,8 @@ author is a self-review; label it so.
     the file is for. Most important rules first.
   - **One purpose per file, one home per fact.** Link; never copy.
   - **Self-contained sections.** Name the subject; never write "see above".
-  - **Budgets.** `AGENTS.md` 200 lines, `SKILL.md` 500, other files 300; add a
-    `## Contents` list above 100 lines.
+  - **Budgets.** `AGENTS.md` 200 lines, `SKILL.md` 500, other files 300. Files
+    read on demand get a `## Contents` list above 100 lines.
 
 ## 8. Commands
 

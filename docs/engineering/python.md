@@ -39,31 +39,35 @@ section 8.
 
 | Concern | Tool and rule |
 |---|---|
-| Interpreter | Python 3.14 recommended ([OD-07](../product/open-decisions.md)); pinned in `.python-version` and `requires-python` |
+| Interpreter | Python 3.14 recommended ([OD-07](../product/open-decisions.md)); pinned in `.python-version` and `requires-python`; CI reads `.python-version` |
 | Environments and dependencies | `uv`; `uv.lock` is committed; CI runs `uv sync --locked` |
 | Development tools | `[dependency-groups]` (PEP 735), not optional extras |
 | Lint and format | Ruff: `ruff format` and `ruff check`, version pinned |
-| Types | Pyright in `strict` mode is the blocking gate |
+| Types | Pyright in `strict` mode is the blocking gate: it follows the typing specification most closely and checks unannotated code too |
 | Tests | pytest, Hypothesis, coverage with branch measurement |
 | Module boundaries | import-linter contracts (section 8) |
-| Vulnerabilities | `pip-audit`, or `uv audit` once it leaves preview |
+| Vulnerabilities | `pip-audit`; switch to `uv audit` when it is stable |
 
 - One `pyproject.toml` (PEP 621) holds all tool configuration; the `src/`
   layout keeps tests from importing uninstalled code.
 - Ruff: keep Ruff's default rules and add to them with `extend-select`
-  (`select` replaces the defaults). Add at least `D` (Google convention),
-  `S` (security), `DTZ` (naive datetimes), `BLE` (blind `except`), `T20`
-  (`print`), `ERA` (commented-out code), `TD`/`FIX` (TODO markers) and `PT`
-  (pytest style). Upgrade Ruff deliberately: a new version can enable new
-  rules.
+  (`select` replaces the defaults). Add at least `D` with
+  `pydocstyle.convention = "google"` plus `D401` (imperative summary, which
+  the convention turns off), `S` (security), `DTZ` (naive datetimes), `BLE`
+  (blind `except`), `T20` (`print`), `ERA` (commented-out code), `TD`/`FIX`
+  (TODO markers) and `PT` (pytest style). In `tests/**`, ignore `D101`–`D107`
+  so test functions need no docstring. Upgrade Ruff deliberately: a new
+  version can enable new rules.
 - One local command (for example `make check`) runs exactly what CI runs.
-- Re-evaluate `ty` as the type checker when it reaches a stable release
-  (beta as of 2026-10-02).
+- Re-evaluate `ty` as the type checker when it is stable. The current status
+  of `ty` and `uv audit` is tracked in
+  [research/01](../research/01-external-code-and-sources.md).
 
 ## 3. Types and data models
 
 - Every function signature is fully typed. `Any`, `cast` and
-  `# type: ignore[code]` need a comment explaining why no real fix exists.
+  `# pyright: ignore[ruleName]` need a comment explaining why no real fix
+  exists.
 - Use modern syntax: `X | None`, built-in generics (`list[int]`), PEP 695 type
   parameters, `typing.Self`, `@override`.
 - Every value that crosses a boundary (API, provider, model, database, event)
@@ -97,8 +101,9 @@ section 8.
 - `Decimal` for every price, quantity, cash amount and fee, including JSON
   (serialize as strings) and database columns (`numeric(p, s)`).
 - Build `Decimal` from strings or integers, never from `float`.
-- At process start, trap `decimal.FloatOperation` in the default context, so
-  constructing a `Decimal` from a `float`, or ordering a `Decimal` against a
+- At process start, trap `decimal.FloatOperation` in both
+  `decimal.DefaultContext` (copied by every new thread) and the current
+  `decimal.getcontext()` (inherited by asyncio tasks), so constructing a `Decimal` from a `float`, or ordering a `Decimal` against a
   `float`, raises instead of passing silently. Equality comparisons with a
   `float` stay silent, so reviews still look for them.
 - Round only with `quantize()` and an explicit rounding mode, chosen per use

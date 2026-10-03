@@ -1,5 +1,7 @@
 # Review: <change>
 
+<One sentence: the verdict and the most important finding.>
+
 ## Scope and evidence
 
 - Base:

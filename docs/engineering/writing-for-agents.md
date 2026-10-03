@@ -77,7 +77,10 @@ Rules:
   file is for, before the first `##` heading. An agent must be able to decide
   from those lines whether to keep reading.
 - Put the most important rules first, not in the middle.
-- Files over 100 lines start with a `## Contents` list.
+- Files read on demand that exceed 100 lines start with a `## Contents` list
+  after the summary. Agents often preview only the first 100 lines of a file,
+  so the list shows them everything the file holds. `AGENTS.md` is exempt
+  because it is always loaded whole.
 - Names are lowercase kebab-case; prefix `NN-` when reading order matters
   (`01-system.md`). Headings name their subject (`## Risk policy`, not
   `## Details`).
@@ -99,8 +102,8 @@ remove it.
   long rationale into rules.
 - Each fact lives in exactly one file. Other files link to it; they never copy
   it. Two copies drift apart, and an agent may follow either one.
-- When two files disagree, the authority order in `docs/README.md` decides;
-  fix the lower one in the same change.
+- When two files disagree, follow the authority order and conflict rules in
+  [`docs/README.md`](../README.md#authority-order).
 
 ## 6. Self-contained sections
 
@@ -160,16 +163,16 @@ Bad:  As noted above, this must also be idempotent.
 ## 11. What the harness checks
 
 `python3 scripts/check_harness.py` enforces the mechanical part of this
-standard:
+standard; review covers the rest.
 
-- title on line 1 and a summary before the first `##` in `docs/` and specs;
-- `## Contents` in files over 100 lines;
-- line budgets for `AGENTS.md`, `SKILL.md`, documents and specs;
-- every document in `docs/` is listed in `docs/README.md`;
-- every file inside a skill is linked from its `SKILL.md`, and references do
-  not link to further references;
-- no "see above" or "see below";
-- every relative link resolves.
+- In `docs/` and `specs/`: title on line 1, a summary before the first `##`,
+  `## Contents` above 100 lines, and the 300-line budget.
+- `AGENTS.md` within 200 lines and `SKILL.md` within 500 lines.
+- Every document in `docs/` is listed in `docs/README.md`.
+- Every file inside a skill is linked from its `SKILL.md`, and references do
+  not link to further references.
+- No "see above" or "see below" outside quotes and code blocks.
+- Every relative link points to an existing file (anchors are not checked).
 
 ## 12. References
 

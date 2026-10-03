@@ -9,6 +9,8 @@ risk_rationale: <Why this level applies>
 
 # <Task> implementation plan
 
+<One or two sentences: what will be built and the chosen approach.>
+
 ## Goal and source intent
 
 ## Repository facts

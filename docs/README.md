@@ -11,21 +11,26 @@ follow its links; do not read the whole tree.
 
 ## Authority order
 
-When two sources disagree, the higher one wins. Never resolve a conflict
-silently: fix the lower source in the same change, or stop and ask when the
-higher source looks wrong.
+When two sources disagree, the higher one wins:
 
-1. Code, tests and executable checks (observed behavior).
-2. [`AGENTS.md`](../AGENTS.md): rules and process.
-3. [`decisions/`](decisions/): accepted architecture decisions (ADRs).
-4. [`contracts/`](contracts/): canonical schemas, events and interfaces.
-5. Approved specs in [`specs/`](../specs/README.md).
+1. [`AGENTS.md`](../AGENTS.md): rules and process.
+2. [`decisions/`](decisions/): accepted architecture decisions (ADRs).
+3. [`contracts/`](contracts/): canonical schemas, events and interfaces.
+4. Approved specs in [`specs/`](../specs/README.md).
+5. Code, tests and executable checks: what the system actually does.
 6. Baseline design: [`domains/`](domains/), [`architecture/`](architecture/),
    [`product/`](product/), [`delivery/`](delivery/) and
    [`research/`](research/).
 
-A spec that needs to change a contract or an ADR must amend it first, with
-explicit human approval.
+How to resolve a conflict:
+
+- **Code contradicts levels 1–4**: the code is the defect. Fix the code, or
+  stop and ask; never edit a binding source to match the code.
+- **A binding source looks wrong** (levels 1–3): stop and ask. Changing it
+  needs explicit human approval, and a spec that needs the change amends it
+  first.
+- **The baseline contradicts code or a spec**: update the baseline document in
+  the same change.
 
 ## Index
 
