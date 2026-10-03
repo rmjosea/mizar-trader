@@ -1,6 +1,6 @@
 ## Task
 
-- Backlog task: <!-- e.g. F02 -->
+- Plan task: <!-- e.g. F02-T03 -->
 - Spec / plan: <!-- SPEC-F02, .work/F02-... or "direct path" -->
 - Risk: <!-- low | medium | high -->
 

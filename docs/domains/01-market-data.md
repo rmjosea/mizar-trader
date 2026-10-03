@@ -39,5 +39,6 @@ market, with a gap and latency report.
 
 ## Backlog
 
-D01, D02, D03, D04, D05. Contracts: [domain model](../contracts/00-domain-model.md),
+D01 (historical data and snapshots), P01 (live feed and freshness).
+Contracts: [domain model](../contracts/00-domain-model.md),
 [providers](../contracts/03-provider-interfaces.md).

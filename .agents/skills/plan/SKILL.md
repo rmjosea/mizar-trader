@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Designs how an approved spec, backlog task or confirmed request will be implemented, resolving technical decisions with the user one question at a time, and writes a plan under .work/. Use for architecture, data models, interfaces, migrations, test strategy, or any medium or high risk change. Does not write production code or split work into tasks.
+description: Designs how an approved spec, backlog block or confirmed request will be implemented, resolving technical decisions with the user one question at a time, and writes a plan under .work/. Use for architecture, data models, interfaces, migrations, test strategy, or any medium or high risk change. Does not write production code or split work into tasks.
 ---
 
 # Plan an implementation
@@ -19,7 +19,7 @@ production code.
 3. Resolve each material open choice with one question at a time
    (`AGENTS.md` section 1). Decide trivial, reversible choices yourself and
    record a one-line rationale.
-4. Write `.work/<TASK-ID>-<slug>/plan.md` from
+4. Write `.work/<BLOCK-ID>-<slug>/plan.md` from
    [assets/plan.template.md](assets/plan.template.md). Keep `status: draft`
    until the user confirms the whole direction; then set `approved`.
 
@@ -43,5 +43,5 @@ decides it.
 - No material decision is hidden inside the design.
 
 When the plan fully covers a spec, report that the spec may move to `planned`.
-Use `decompose-tasks` only when the work needs several sessions, agents or
-handoffs.
+Then run `decompose-tasks`: each of its tasks becomes one branch and one
+pull request.

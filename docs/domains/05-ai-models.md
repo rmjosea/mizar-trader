@@ -42,4 +42,4 @@ proposal or a safe abstention, without any order execution.
 
 ## Backlog
 
-A01, A02, A03, A04, X02.
+A01, X02.

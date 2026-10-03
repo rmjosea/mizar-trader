@@ -99,8 +99,9 @@ idea -> shape-idea -> write-spec -> plan -> decompose-tasks -> implement -> revi
 
 The skills live in `.agents/skills/` (Claude Code reads them through
 `.claude/skills/`). Read a skill's `SKILL.md` only when its description fits
-the task. Work on one task from [`docs/delivery/01-backlog.md`](docs/delivery/01-backlog.md)
-per branch and pull request; new specs may add tasks.
+the task. Each row of [`docs/delivery/01-backlog.md`](docs/delivery/01-backlog.md)
+is a functional block with one spec. Its approved plan is decomposed into
+tasks (`<BLOCK-ID>-T01`, …); work on one task per branch and pull request.
 
 | Path | Use when | Required artifacts |
 |---|---|---|
@@ -128,14 +129,15 @@ author is a self-review; label it so.
 
 | Artifact | Location | Answers |
 |---|---|---|
-| Backlog task | `docs/delivery/01-backlog.md` | what is next |
-| Spec | `specs/<TASK-ID>-<slug>/spec.md` (`SPEC-<TASK-ID>`) | what must be true |
-| Plan, task graph, handoff, review | `.work/<TASK-ID>-<slug>/` (not committed) | how and in what order |
+| Backlog block | `docs/delivery/01-backlog.md` | which capability is next |
+| Spec | `specs/<BLOCK-ID>-<slug>/spec.md` (`SPEC-<BLOCK-ID>`) | what must be true |
+| Plan, task graph, handoff, review | `.work/<BLOCK-ID>-<slug>/` (not committed) | how and in what order |
 | Decision record | `docs/decisions/NNNN-<slug>.md` | durable architecture choice |
 | Open decision | `docs/product/open-decisions.md` | choices nobody has made yet |
 
 - Spec states: `draft -> approved -> [planned] -> implemented -> verified`.
-  Move a state only when its evidence exists.
+  Move a state only when its evidence exists. A spec becomes `implemented`
+  when its last task is merged.
 - If the **how** changes, update the plan. If the **what** changes, stop, ask,
   and update the spec before the code.
 - Changing `docs/contracts/` or resolving an open decision needs explicit human
@@ -168,13 +170,14 @@ author is a self-review; label it so.
 |---|---|
 | Harness and documentation check | `python3 scripts/check_harness.py` |
 | Harness tests | `python3 -m unittest discover -s tests/harness` |
-| App lint, types, tests | defined by backlog task F01; update this table then |
+| App lint, types, tests | defined by backlog block F01; update this table then |
 
 ## 9. Git
 
-- Branches: `feat/<TASK-ID>-<slug>`, `fix/<TASK-ID>-<slug>`, `chore/<slug>`.
+- Branches: `feat/<TASK-ID>-<slug>`, `fix/<TASK-ID>-<slug>`, `chore/<slug>`,
+  where `<TASK-ID>` is a plan task such as `F02-T03`.
 - Commit subject: imperative, at most 72 characters, starting with the task
-  ID when there is one: `F02: Validate Decimal precision in fills`,
+  ID when there is one: `F02-T03: Validate Decimal precision in fills`,
   `chore: Update harness checks`.
 - **The human operator is the only author.** Keep the configured Git
   `user.name` and `user.email`. Never add `Co-Authored-By`, "Generated with"

@@ -11,7 +11,7 @@ Finish one outcome and leave the repository in a verifiable state.
 
 Pick exactly one input:
 
-- a `ready` step from `.work/<TASK-ID>-<slug>/tasks.md`: confirm every
+- a `ready` step from `.work/<BLOCK-ID>-<slug>/tasks.md`: confirm every
   dependency is `done`, then set it to `in-progress`;
 - one decision-complete outcome from an approved spec or plan;
 - a direct-path request: confirm it meets the direct-path row in `AGENTS.md`
@@ -56,7 +56,7 @@ a green result. If a check seems wrong, stop and report it with evidence.
 - After a step is `done`, move dependent steps to `ready` only when all their
   dependencies are `done` and no decision or external blocker remains.
 - If you stop early or someone else will continue, write
-  `.work/<TASK-ID>-<slug>/handoff.md` from
+  `.work/<BLOCK-ID>-<slug>/handoff.md` from
   [assets/handoff.template.md](assets/handoff.template.md).
 - Self-check the diff: every changed line traces to the task.
 - Report: files changed, behavior delivered, checks and results, risks, next

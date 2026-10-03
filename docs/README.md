@@ -6,7 +6,7 @@ list of what Mizar Trader will build. Approved specs in
 [`specs/`](../specs/README.md) define what is built; when a spec extends or
 changes the baseline, the affected document is updated in the same change.
 
-Load documents on demand. Start from the backlog task you are working on and
+Load documents on demand. Start from the backlog block you are working on and
 follow its links; do not read the whole tree.
 
 ## Authority order

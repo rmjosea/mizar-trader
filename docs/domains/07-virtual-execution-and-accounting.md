@@ -36,4 +36,4 @@ A toy ledger reconciles exactly and every fill is traceable to its decision.
 
 ## Backlog
 
-E01, E02.
+E01.

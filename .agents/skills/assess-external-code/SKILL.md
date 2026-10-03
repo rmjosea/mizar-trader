@@ -39,7 +39,7 @@ credentials and no repository secrets. Label anything not reproduced as
 ## Output
 
 Use [assets/assessment.template.md](assets/assessment.template.md) and save it
-to `.work/<TASK-ID>-<slug>/assessment.md`. Finish with one verdict:
+to `.work/<BLOCK-ID>-<slug>/assessment.md`. Finish with one verdict:
 
 - `adopt`: meets the bar for the stated intended use;
 - `adopt-isolated`: usable only as reference or isolated benchmark;

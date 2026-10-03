@@ -38,4 +38,4 @@ limitations, costs and sample sizes.
 
 ## Backlog
 
-V01, X01.
+B01 (metrics and experiment registry), X01.
