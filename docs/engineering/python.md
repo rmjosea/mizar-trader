@@ -103,8 +103,9 @@ section 8.
 - Build `Decimal` from strings or integers, never from `float`.
 - At process start, trap `decimal.FloatOperation` in both
   `decimal.DefaultContext` (copied by every new thread) and the current
-  `decimal.getcontext()` (inherited by asyncio tasks), so constructing a `Decimal` from a `float`, or ordering a `Decimal` against a
-  `float`, raises instead of passing silently. Equality comparisons with a
+  `decimal.getcontext()` (inherited by asyncio tasks), so constructing a
+  `Decimal` from a `float`, or ordering a `Decimal` against a `float`, raises
+  instead of passing silently. Equality comparisons with a
   `float` stay silent, so reviews still look for them.
 - Round only with `quantize()` and an explicit rounding mode, chosen per use
   and documented next to the call: quantities round **down** to the lot size;

@@ -33,18 +33,29 @@ CODE_SUFFIXES = {".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".sh", ".yml", ".y
 HASH_COMMENT_SUFFIXES = {".sh", ".yml", ".yaml", ".toml"}
 FORBIDDEN_IN_COMMENTS = [
     (re.compile(r"\b(?:SPEC|REQ|PLAN|TASK|OD|AC)-[A-Z0-9]"), "workflow ID"),
-    (re.compile(r"\b(?:issue|pr|pull request|ticket)\s*#\s*\d+|(?:^|\s)#\d+\b|\bGH-\d+\b", re.IGNORECASE), "issue reference"),
+    (
+        re.compile(r"\b(?:issue|pr|pull request|ticket|see|fixes|closes|resolves)\s*#\s*\d+|\bGH-\d+\b", re.IGNORECASE),
+        "issue reference",
+    ),
     (
         re.compile(
             r"co-authored-by|\bClaude Code\b|\bCodex\b"
-            r"|\b(?:generated|written|authored|created) (?:by|with|using) "
-            r"(?:Claude|Codex|ChatGPT|Copilot|GPT|AI|an? (?:AI|LLM|agent|assistant))\b",
+            r"|\b(?:file|module|code|class|function|script) (?:was |is )?(?:auto-?)?"
+            r"(?:generated|written|authored|created) (?:by|with|using)\b"
+            r"|^(?:#|//|--)?\s*(?:auto-?)?generated (?:by|with)\b",
             re.IGNORECASE,
         ),
         "agent attribution",
     ),
     (re.compile(r"\b(?:TODO|FIXME|XXX)\b"), "TODO marker (open a backlog item)"),
-    (re.compile(r"\b(?:previously|formerly|old version|legacy version)\b", re.IGNORECASE), "history note"),
+    (
+        re.compile(
+            r"\b(?:formerly|old version|legacy version|previously (?:used|was|were|returned|did|called|stored))\b"
+            r"|^(?:#|//|--)?\s*previously\b",
+            re.IGNORECASE,
+        ),
+        "history note",
+    ),
 ]
 COMMENT_ONLY_FORBIDDEN = [
     (re.compile(r"^(?:#|//|--|/\*|\*)\s*[-=*#~_]{4,}"), "banner or divider comment"),

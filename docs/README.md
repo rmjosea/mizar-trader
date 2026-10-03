@@ -25,10 +25,11 @@ When two sources disagree, the higher one wins:
 How to resolve a conflict:
 
 - **Code contradicts levels 1–4**: the code is the defect. Fix the code, or
-  stop and ask; never edit a binding source to match the code.
-- **A binding source looks wrong** (levels 1–3): stop and ask. Changing it
-  needs explicit human approval, and a spec that needs the change amends it
-  first.
+  stop and ask; never edit a higher source to match the code.
+- **A source at levels 1–4 looks wrong**: stop and ask. Changing levels 1–3
+  needs explicit human approval; a spec that needs such a change amends that
+  source first. A wrong approved spec goes back to `write-spec` for
+  re-approval.
 - **The baseline contradicts code or a spec**: update the baseline document in
   the same change.
 

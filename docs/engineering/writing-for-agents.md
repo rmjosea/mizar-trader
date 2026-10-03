@@ -165,7 +165,7 @@ Bad:  As noted above, this must also be idempotent.
 `python3 scripts/check_harness.py` enforces the mechanical part of this
 standard; review covers the rest.
 
-- In `docs/` and `specs/`: title on line 1, a summary before the first `##`,
+- In `docs/` and spec files (`specs/*/spec.md`): title on line 1, a summary before the first `##`,
   `## Contents` above 100 lines, and the 300-line budget.
 - `AGENTS.md` within 200 lines and `SKILL.md` within 500 lines.
 - Every document in `docs/` is listed in `docs/README.md`.
