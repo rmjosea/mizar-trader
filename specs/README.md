@@ -8,6 +8,7 @@ One spec per backlog functional block, stored as
 
 | ID | Capability | Status | Depends on |
 |---|---|---|---|
+| SPEC-F01 | [Platform foundation](F01-platform-foundation/spec.md) | draft | None |
 
 ## Status definitions
 
