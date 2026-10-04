@@ -1,7 +1,7 @@
 ---
 id: SPEC-F01
 title: Platform foundation
-status: draft
+status: approved
 depends_on: []
 ---
 
