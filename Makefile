@@ -2,7 +2,7 @@
 
 RUN := uv run --frozen
 
-.PHONY: check up down stack-check
+.PHONY: check up down stack-check doctor
 
 check:
 	uv sync --locked
@@ -26,3 +26,7 @@ down:
 # Start the stack and verify health, recovery, loopback ports and log hygiene.
 stack-check:
 	python3 scripts/stack_check.py
+
+# Check this host: architecture, Docker, uv, .env, disk, clock, connectivity.
+doctor:
+	python3 scripts/doctor.py

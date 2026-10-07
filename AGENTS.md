@@ -86,6 +86,7 @@ before the code.
 
 | Purpose | Command |
 |---|---|
+| Check this host before anything else (exit 1 on FAIL) | `make doctor` |
 | Every check CI runs (sync, format, lint, types, imports, tests, audit, harness) | `make check` |
 | One test file while iterating | `uv run pytest tests/<file>.py` |
 | Start api and postgres (needs `.env` from `.env.example`) / stop them | `make up` / `make down` |
