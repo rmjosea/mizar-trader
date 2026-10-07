@@ -1,60 +1,28 @@
 # Agent Contract
 
 Mizar Trader is a research lab for trading strategies: **real market data,
-virtual money, no real orders.** This file is the only always-loaded
-instruction file for every coding agent. Load anything else on demand from
-[`docs/README.md`](docs/README.md).
+virtual money, no real orders.** This is the only always-loaded instruction
+file. Find everything else through [`docs/README.md`](docs/README.md).
 
 ## 1. How to communicate
 
-Write to the human in the language they use; write repository files in
-English.
-
-- Lead with the answer or result. Details come after.
-- Use short sentences, one idea each, active voice and common words. Define a
-  technical term the first time you use it.
-- Be exact: give numbers, file paths, commands and dates. Never write "should
-  work", "probably fine" or "some issues".
-- Keep facts apart from guesses. Mark anything you did not run or read
-  yourself as **assumption** or **unknown**.
-- When something can be read two ways, add a short example that shows which
-  way you mean.
-- When the human must choose, ask one question with two to four options, the
-  consequence of each, and one marked **Recommended** with the reason:
-
-  ```text
-  Decision: what should the backtester do when a daily bar is missing?
-  1. Skip that instrument for that day (Recommended): no invented prices;
-     other strategies keep running.
-  2. Stop the whole run: safest, but one data gap halts every strategy.
-  Answer 1, 2, or describe another option.
-  ```
-
-Ask only when the answer changes scope, behavior, architecture, security,
-cost, reversibility or research validity. Decide trivial, reversible choices
-yourself and state them in one line.
+- Reply in the human's language; write repository files in English.
+- Lead with the result. Be exact: numbers, paths, commands, dates.
+- Mark anything you did not run or read yourself as **assumption**.
+- Ask only when the answer changes scope, behavior, security, cost or research
+  validity; decide reversible details yourself and say so in one line.
+- Ask one decision at a time as a selectable list (the `AskUserQuestion` tool
+  when available): two to four options, each with its consequence, the
+  recommended one first and marked **(Recommended)**.
 
 ## 2. How to work
 
-1. **Think before coding.** State your assumptions. If the request has two
-   readings that lead to different results, show both and ask. If a simpler
-   approach exists, say so. If something is unclear, stop and name it; do not
-   guess.
-2. **Keep it simple.** Write the minimum code that solves the accepted
-   problem. No speculative features, abstractions, options or error handling
-   for impossible cases. Test: would a senior engineer call it
-   overcomplicated? Then simplify.
-3. **Make surgical changes.** Touch only what the task needs. Match the
-   existing style. Do not refactor, reformat or "improve" neighboring code;
-   mention unrelated problems instead. Remove only what your change made
-   unused. Test: every changed line traces to the task.
-4. **Drive by verifiable goals.** Turn the task into steps with checks, then
-   loop until every check passes:
-
-   ```text
-   1. Add Decimal validation to Fill -> verify: tests/contracts/test_fill.py passes
-   2. Reject float prices           -> verify: new negative test fails before, passes after
-   ```
+- **Simplest thing that works.** No speculative features, options or
+  abstractions. Say so when a simpler approach exists.
+- **Surgical changes.** Touch only what the task needs; mention unrelated
+  problems instead of fixing them.
+- **Verify, don't assert.** Turn the task into checks, loop until they pass,
+  and show the command and its result.
 
 ## 3. Non-negotiable rules
 
@@ -88,110 +56,64 @@ Breaking one of these is a `critical` finding, even if every test passes.
 
 ## 4. Workflow
 
-In `docs/`, contracts and decision records are **binding**. Everything else is
-the **baseline design**: the starting point for specs, not the full list of
-what we will build. An approved spec defines what we build; if it extends or
-changes the baseline, update the affected document in the same change.
+Pick the path by size and risk:
 
-```text
-idea -> shape-idea -> write-spec -> plan -> decompose-tasks -> implement -> review
-```
+- **Small** (you can state the diff in one sentence) **and normal**: change
+  it, run `make check`, open the pull request.
+- **Anything else**: `spec` (what) -> `plan` (how, plus the task list) ->
+  `implement` (one task per branch and pull request) -> `review`.
 
-The skills live in `.agents/skills/` (Claude Code reads them through
-`.claude/skills/`). Read a skill's `SKILL.md` only when its description fits
-the task. Each row of [`docs/delivery/01-backlog.md`](docs/delivery/01-backlog.md)
-is a functional block with one spec. Its approved plan is decomposed into
-tasks (`<BLOCK-ID>-T01`, …); work on one task per branch and pull request.
+Two risk levels:
 
-| Path | Use when | Required artifacts |
-|---|---|---|
-| Direct | `low` risk **and** small, local, reversible, one session | inline Intent, Change, Verification |
-| Standard | any other `low` risk work | a spec when the **what** is new or unclear; a plan when the **how** is not obvious |
-| Controlled | `medium` or `high` risk | approved spec or task acceptance, approved plan, review |
+- **critical**: enforces a section 3 rule (ledger, risk gate, execution,
+  point-in-time snapshots, live boundary), touches secrets, contracts in
+  `docs/contracts/` or the event journal, adds a dependency or external code,
+  or changes an experiment after results exist. It needs failure-path tests
+  and an **independent review** (`.claude/agents/independent-reviewer.md` or
+  a human) before merge.
+- **normal**: everything else. It needs tests and a green `make check`.
 
-Never use the direct path for contracts, persisted data, migrations, ledger,
-risk, execution, scheduling, secrets, dependencies or the live-order boundary.
+Skills live in `.agents/skills/` (linked from `.claude/skills/`). The backlog
+([`docs/delivery/01-backlog.md`](docs/delivery/01-backlog.md)) lists
+functional blocks; each gets one spec in `specs/`; plans and handoffs go in
+`.work/` (not committed). Contracts in `docs/contracts/` and decisions in
+`docs/decisions/` are binding; changing them, or resolving an open decision,
+needs explicit human approval. If the **what** changes, update the spec
+before the code.
 
-## 5. Risk
-
-| Risk | Applies to |
-|---|---|
-| `high` | contracts, event journal, ledger, risk gate, execution and fills, scheduler, security and secrets, a new dependency or external code, changing an experiment after results exist |
-| `medium` | provider adapters, features, strategies, backtester, metrics, model adapters, upgrading an approved dependency |
-| `low` | documentation, read-only dashboard views, developer tooling |
-
-`medium` needs failure-path tests. `high` also needs recovery evidence and an
-**independent review** by an agent that did not write the change (for Claude
-Code: `.claude/agents/independent-reviewer.md`) or by a human. A review by the
-author is a self-review; label it so.
-
-## 6. Artifacts and traceability
-
-| Artifact | Location | Answers |
-|---|---|---|
-| Backlog block | `docs/delivery/01-backlog.md` | which capability is next |
-| Spec | `specs/<BLOCK-ID>-<slug>/spec.md` (`SPEC-<BLOCK-ID>`) | what must be true |
-| Plan, task graph, handoff, review | `.work/<BLOCK-ID>-<slug>/` (not committed) | how and in what order |
-| Decision record | `docs/decisions/NNNN-<slug>.md` | durable architecture choice |
-| Open decision | `docs/product/open-decisions.md` | choices nobody has made yet |
-
-- Spec states: `draft -> approved -> [planned] -> implemented -> verified`.
-  Move a state only when its evidence exists. A spec becomes `implemented`
-  when its last task is merged.
-- If the **how** changes, update the plan. If the **what** changes, stop, ask,
-  and update the spec before the code.
-- Changing `docs/contracts/` or resolving an open decision needs explicit human
-  approval.
-- Traceability IDs belong in specs, plans, commits and pull requests, never in
-  source code comments.
-
-## 7. Standards
-
-- Python: [`docs/engineering/python.md`](docs/engineering/python.md); code that calls
-  models also: [`docs/engineering/ai-model-code.md`](docs/engineering/ai-model-code.md).
-- Comments and docstrings: [`docs/engineering/code-documentation.md`](docs/engineering/code-documentation.md).
-  They are part of the acceptance criteria, not a later cleanup.
-- Any Markdown an agent reads (docs, specs, skills, plans):
-  [`docs/engineering/writing-for-agents.md`](docs/engineering/writing-for-agents.md).
-  The core rules:
-  - **Progressive disclosure.** Keep only what every task needs at the top
-    level. Link deeper detail with the condition for reading it ("Read X when
-    Y"), one level deep.
-  - **Summary first.** Title on line 1, then one to three sentences on what
-    the file is for. Most important rules first.
-  - **One purpose per file, one home per fact.** Link; never copy.
-  - **Self-contained sections.** Name the subject; never write "see above".
-  - **Budgets.** `AGENTS.md` 200 lines, `SKILL.md` 500, other files 300. Files
-    read on demand get a `## Contents` list above 100 lines.
-
-## 8. Commands
+## 5. Commands
 
 | Purpose | Command |
 |---|---|
 | Harness and documentation check | `python3 scripts/check_harness.py` |
 | Harness tests | `python3 -m unittest discover -s tests/harness` |
-| App lint, types, tests | defined by backlog block F01; update this table then |
+| App lint, types, tests | defined by backlog block F01 (`make check`); update this table then |
 
-## 9. Git
+Standards, read when writing that kind of file:
+[Python](docs/engineering/python.md),
+[model-calling code](docs/engineering/ai-model-code.md),
+[comments and docstrings](docs/engineering/code-documentation.md),
+[Markdown for agents](docs/engineering/writing-for-agents.md).
+
+## 6. Git
 
 - Branches: `feat/<TASK-ID>-<slug>`, `fix/<TASK-ID>-<slug>`, `chore/<slug>`,
   where `<TASK-ID>` is a plan task such as `F02-T03`.
 - Commit subject: imperative, at most 72 characters, starting with the task
-  ID when there is one: `F02-T03: Validate Decimal precision in fills`,
-  `chore: Update harness checks`.
+  ID when there is one: `F02-T03: Validate Decimal precision in fills`.
 - **The human operator is the only author.** Keep the configured Git
   `user.name` and `user.email`. Never add `Co-Authored-By`, "Generated with"
   or any agent name to commits, trailers, pull requests or release notes.
+- Traceability IDs (`SPEC-`, `F02-T03`) go in specs, plans, commits and pull
+  requests, never in source code comments.
 - Never force-push shared branches, skip hooks (`--no-verify`), or commit
   secrets, `.env` files or licensed raw data.
 
-## 10. Definition of done
+## 7. Definition of done
 
-- The accepted scope is implemented and each acceptance criterion has
-  evidence.
-- Relevant tests, static checks and `python3 scripts/check_harness.py` pass.
-- Section 3 rules were checked at the depth the risk requires.
-- The diff has no unexplained changes; docs, contracts and backlog status are
-  current.
-- The final report lists commands run with results, skipped checks,
-  assumptions, remaining risks and follow-up work.
+- Every acceptance criterion has evidence: the command run and its result.
+- `make check` (or, until F01 lands, the two harness commands) passes.
+- Critical work has an independent review with verdict `approved`.
+- Docs, spec status and backlog status match the change.
+- The final report lists commands and results, skipped checks, assumptions
+  and remaining risks.

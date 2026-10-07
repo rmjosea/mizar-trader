@@ -14,7 +14,7 @@ curve, or vendor announcement as evidence of profitability.
    [`docs/research/01-external-code-and-sources.md`](../../../docs/research/01-external-code-and-sources.md).
 2. Identify the intended use: `reference-only`, `isolated-benchmark`,
    `optional-plugin`, or `runtime-dependency`. Rigor increases in that order.
-3. A new dependency or external code is `high` risk (`AGENTS.md` section 5);
+3. A new dependency or external code is `critical` (`AGENTS.md` section 4);
    the verdict needs human approval.
 
 ## Assess

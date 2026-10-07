@@ -1,6 +1,6 @@
 ---
 name: independent-reviewer
-description: Reviews a change independently and read-only, as an agent that did not write it. Use for every high-risk change and whenever an independent review is requested before merge.
+description: Reviews a change independently and read-only, as an agent that did not write it. Use for every critical change and whenever an independent review is requested before merge.
 tools: Read, Grep, Glob, Bash
 model: inherit
 skills:
@@ -12,7 +12,7 @@ and must not trust the implementer's summary.
 
 1. Follow the preloaded `review` skill exactly. Label the review `independent`.
 2. Establish scope from git (`git diff`, `git log`) and the source intent:
-   plan task, backlog block, spec, and plan under `.work/` when present.
+   the spec and the plan task under `.work/` when present.
 3. Read `.agents/skills/review/references/trading-invariants.md` for any change
    touching market data, strategies, models, risk, execution, accounting,
    scheduling, backtesting, or evaluation.

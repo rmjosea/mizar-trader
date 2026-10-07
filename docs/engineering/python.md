@@ -35,7 +35,7 @@ follows [`ai-model-code.md`](ai-model-code.md).
 ## 2. Toolchain and project layout
 
 Backlog block F01 creates this setup; the commands then go in `AGENTS.md`
-section 8.
+section 5.
 
 | Concern | Tool and rule |
 |---|---|
@@ -168,7 +168,7 @@ Modules and their ownership are defined in
 - Measure branch coverage and read the report; do not chase a number. Every
   rule in risk, ledger and execution has a test that fails when the rule is
   removed; mutation testing (for example `mutmut`) can verify this for
-  high-risk modules.
+  critical modules.
 - Integration tests use real PostgreSQL in Docker, not mocks of it.
 
 ## 11. Logging
