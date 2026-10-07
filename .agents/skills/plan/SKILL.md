@@ -6,7 +6,7 @@ description: Designs how an approved spec or confirmed request will be built and
 # Plan an implementation
 
 Choose the simplest design that meets the spec and cut it into tasks that
-each fit one branch and one pull request. Do not modify production code.
+each end in one validated, revertible commit. Do not modify production code.
 
 ## Steps
 
@@ -26,8 +26,8 @@ each fit one branch and one pull request. Do not modify production code.
 
 ## Tasks
 
-- IDs are `<BLOCK-ID>-T01`, `-T02`, …; each is one branch and one pull
-  request with one verifiable result. Slice by outcome, never by layer.
+- IDs are `<BLOCK-ID>-T01`, `-T02`, …; each is one commit with one
+  verifiable result. Slice by outcome, never by layer.
 - Each task names its acceptance criteria, its checks, the tasks it depends
   on, and its risk (`critical` or `normal`, `AGENTS.md` section 4).
 - Every acceptance criterion maps to at least one task.

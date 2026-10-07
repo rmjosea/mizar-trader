@@ -7,13 +7,13 @@ the baseline design and grows as new capabilities are confirmed.
 - **Block -> spec -> plan -> tasks.** Each block has one spec,
   `specs/<BLOCK-ID>-<slug>/spec.md`. Its plan lists tasks `<BLOCK-ID>-T01`,
   `-T02`, …, each with its own risk (`AGENTS.md` section 4); each task is one
-  branch and one pull request.
+  validated commit on the spec's branch.
 - **Start rule.** A block starts only when all its dependencies are `done`.
 - **New blocks** get the next free ID in their area letter (for example
   `D02`), are confirmed by the operator, and are added here in the change that
   needs them.
 - **Status**: `todo`, `in-progress` (spec work has started), `done` (spec is
-  `done`). Update it in the pull request that changes it.
+  `done`). Update it in the commit that changes it.
 - **Gate**: the release gate the block contributes evidence to
   ([02-release-gates](02-release-gates.md)).
 

@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Implements one bounded change (one task from an approved plan, or one small change the user confirmed) in short edit-and-verify loops, with tests and docstrings, ending with a pull request and evidence. Use when the user asks to build, code, fix or continue accepted work. Does not expand scope or start a task whose dependencies are not done.
+description: Implements one bounded change (one task from an approved plan, or one small change the user confirmed) in short edit-and-verify loops, with tests and docstrings, ending with one validated commit and evidence. Use when the user asks to build, code, fix or continue accepted work. Does not expand scope or start a task whose dependencies are not done.
 ---
 
 # Implement one task
@@ -11,8 +11,8 @@ Finish one outcome and leave the repository green and reviewable.
 
 1. **Pick one input:** a `todo` task in `.work/<BLOCK-ID>-<slug>/plan.md`
    whose dependencies are `done`, or a small change the user confirmed
-   (`AGENTS.md` section 4). Create the branch (`AGENTS.md` section 6) and set
-   the task to `in-progress`.
+   (`AGENTS.md` section 4). Work on the spec's branch (`AGENTS.md`
+   section 6) and set the task to `in-progress`.
 2. **Read** the affected code and tests. Write the goal as checks. Stop and
    ask on a material ambiguity; never invent a product or architecture
    choice.
@@ -22,9 +22,11 @@ Finish one outcome and leave the repository green and reviewable.
    ([code-documentation](../../../docs/engineering/code-documentation.md)).
 4. **Verify:** run `make check`
    and compare the behavior with each acceptance criterion of the task.
-5. **Close:** commit, push, open the pull request with the commands and
-   results, and set the task to `done` once merged. For a `critical` task,
-   request the independent review before merge. If you stop early, write
+5. **Close:** for a `critical` task, get the independent review on the
+   task's diff and fix what it requires. Then make one commit for the task
+   (subject starts with the task ID), push the branch, set the task to
+   `done`, and report commands and results. Open a pull request only when
+   the human asks. If you stop early, write
    what is done, what is next and the exact state into the plan's task row.
 
 ## Project test rules

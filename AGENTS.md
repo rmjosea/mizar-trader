@@ -59,9 +59,10 @@ Breaking one of these is a `critical` finding, even if every test passes.
 Pick the path by size and risk:
 
 - **Small** (you can state the diff in one sentence) **and normal**: change
-  it, run `make check`, open the pull request.
+  it, run `make check`, commit.
 - **Anything else**: `spec` (what) -> `plan` (how, plus the task list) ->
-  `implement` (one task per branch and pull request) -> `review`.
+  `implement` (one validated commit per task) -> `review`.
+- One branch per spec. Pull requests are opened only when the human asks.
 
 Two risk levels:
 
@@ -97,8 +98,8 @@ Standards, read when writing that kind of file:
 
 ## 6. Git
 
-- Branches: `feat/<TASK-ID>-<slug>`, `fix/<TASK-ID>-<slug>`, `chore/<slug>`,
-  where `<TASK-ID>` is a plan task such as `F02-T03`.
+- Branches: `feat/<BLOCK-ID>-<slug>` (one per spec), `fix/<slug>`,
+  `chore/<slug>`.
 - Commit subject: imperative, at most 72 characters, starting with the task
   ID when there is one: `F02-T03: Validate Decimal precision in fills`.
 - **The human operator is the only author.** Keep the configured Git
