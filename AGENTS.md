@@ -88,6 +88,8 @@ before the code.
 |---|---|
 | Every check CI runs (sync, format, lint, types, imports, tests, audit, harness) | `make check` |
 | One test file while iterating | `uv run pytest tests/<file>.py` |
+| Start api and postgres (needs `.env` from `.env.example`) / stop them | `make up` / `make down` |
+| Verify the stack: health, recovery, loopback ports, log hygiene | `make stack-check` |
 | Harness and documentation check only | `uv run python scripts/check_harness.py` |
 
 Standards, read when writing that kind of file:

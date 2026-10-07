@@ -1,0 +1,40 @@
+# Local stack: the api and an empty PostgreSQL. Ports are published on the
+# loopback interface only. Every value comes from .env (see .env.example).
+
+name: mizar
+
+services:
+  postgres:
+    image: postgres:18.6
+    env_file: .env
+    # Listen on POSTGRES_PORT inside the container too, so the api and the
+    # host use the same value and a busy host port can be changed in .env.
+    command: ["postgres", "-p", "${POSTGRES_PORT:?set POSTGRES_PORT in .env}"]
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p \"$$POSTGRES_PORT\" -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  api:
+    build: .
+    image: mizar-api:local
+    env_file: .env
+    ports:
+      - "127.0.0.1:${API_PORT:?set API_PORT in .env}:${API_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # The slim image has no curl; urlopen fails on any non-200 answer.
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:${API_PORT}/health', timeout=5)"]
+      interval: 2s
+      timeout: 6s
+      retries: 15
+
+volumes:
+  pgdata:

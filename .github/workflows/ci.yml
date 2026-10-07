@@ -1,9 +1,10 @@
 name: ci
 
+# Pull requests are opened only on request, so every pushed branch is
+# checked too, not only main.
 on:
   pull_request:
   push:
-    branches: [main]
 
 permissions:
   contents: read
@@ -19,3 +20,18 @@ jobs:
       # uv installs the interpreter named in .python-version.
       - name: Run make check
         run: make check
+
+  stack:
+    runs-on: ubuntu-latest
+    env:
+      STACK_CHECK_SENTINEL: ci-sentinel-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # No repository secrets: the password is a throwaway sentinel value.
+      - name: Create .env from .env.example
+        run: sed "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$STACK_CHECK_SENTINEL/" .env.example > .env
+      - name: Run stack check on amd64
+        run: make stack-check
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v
