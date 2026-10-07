@@ -20,7 +20,7 @@ Finish one outcome and leave the repository green and reviewable.
    fails for the expected reason; make the smallest change that passes; run
    the narrowest useful check. Write docstrings as you go
    ([code-documentation](../../../docs/engineering/code-documentation.md)).
-4. **Verify:** run `make check` (until F01 lands: the two harness commands)
+4. **Verify:** run `make check`
    and compare the behavior with each acceptance criterion of the task.
 5. **Close:** commit, push, open the pull request with the commands and
    results, and set the task to `done` once merged. For a `critical` task,

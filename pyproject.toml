@@ -1,0 +1,63 @@
+[project]
+name = "mizar-trader"
+version = "0.1.0"
+description = "Research lab for trading strategies: real market data, virtual money, no real orders."
+readme = "README.md"
+requires-python = ">=3.14,<3.15"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "hypothesis==6.168.5",
+    "import-linter==2.15",
+    "pip-audit==2.10.1",
+    "pyright[nodejs]==1.1.414",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.16.10",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "mizar"
+
+[tool.ruff]
+target-version = "py314"
+# Code blocks in docs and contracts are illustrations; edit them by hand.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+extend-select = ["D", "D401", "S", "DTZ", "BLE", "T20", "ERA", "TD", "FIX", "PT"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D101", "D102", "D103", "D104", "D105", "D106", "D107", "S101"]
+"tests/harness/**" = ["PT009"]
+"scripts/**" = ["T201"]
+
+[tool.pyright]
+include = ["src", "tests", "scripts"]
+pythonVersion = "3.14"
+typeCheckingMode = "strict"
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+testpaths = ["tests"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--ignore=tests/harness",
+    "--cov=mizar",
+    "--cov-branch",
+    "--cov-report=term-missing",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+
+[tool.importlinter]
+root_package = "mizar"
