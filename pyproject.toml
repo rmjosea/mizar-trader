@@ -4,10 +4,17 @@ version = "0.1.0"
 description = "Research lab for trading strategies: real market data, virtual money, no real orders."
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
-dependencies = []
+dependencies = [
+    "fastapi==0.142.3",
+    "psycopg[binary]==3.3.6",
+    "pydantic==2.13.5",
+    "pydantic-settings==2.15.0",
+    "uvicorn==0.54.0",
+]
 
 [dependency-groups]
 dev = [
+    "httpx2==2.13.1",
     "hypothesis==6.168.5",
     "import-linter==2.15",
     "pip-audit==2.10.1",
@@ -61,3 +68,9 @@ filterwarnings = ["error"]
 
 [tool.importlinter]
 root_package = "mizar"
+
+[[tool.importlinter.contracts]]
+name = "Configuration does not depend on the HTTP layer"
+type = "forbidden"
+source_modules = ["mizar.config"]
+forbidden_modules = ["mizar.api"]
