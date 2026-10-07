@@ -1,68 +1,43 @@
 ---
 name: review
-description: Reviews a change against its source intent, the AGENTS.md rules and the engineering standards, using the diff and checks it runs itself, and returns findings by severity with a verdict. Use for code review, acceptance or pre-merge review, or an independent review of high-risk work. Read-only unless the user asks for fixes.
+description: Reviews a change against its spec or plan task and the AGENTS.md rules, using the diff and checks it runs itself, and returns findings by severity with a verdict. Use for pre-merge review and for the independent review that critical work needs. Read-only unless the user asks for fixes.
 ---
 
 # Review a change
 
-Judge the actual diff and observed behavior. Never treat the author's summary
-as evidence.
+Judge the actual diff and the observed behavior. Never treat the author's
+summary as evidence.
 
 State the independence: `independent` only when the reviewer did not write the
 change (a fresh session, the `independent-reviewer` agent, or a human);
-otherwise `self-review`. High-risk work with only a self-review gets `blocked`.
+otherwise `self-review`. Critical work with only a self-review is `blocked`.
 
-## 1. Establish scope
+## Steps
 
-1. Record the base and head (or working-tree scope) and capture the diff.
-2. Find the source intent: spec, backlog row, plan, or confirmed request. Do
-   not invent missing intent.
-3. List the checks that can prove each acceptance criterion.
+1. Capture base, head and the diff. Find the source intent (spec acceptance
+   criteria, plan task, or confirmed request); never invent it.
+2. Check intent: every acceptance criterion is met with evidence; nothing
+   required is missing; nothing unrequested was added.
+3. Check engineering: correctness, simplicity, every changed line traces to
+   the task, docstrings follow
+   [code-documentation](../../../docs/engineering/code-documentation.md).
+4. Check integrity: **no test, fixture, threshold, lint rule, metric or
+   experiment criterion was weakened to pass.** Compare test changes with code
+   changes.
+5. Read [references/trading-invariants.md](references/trading-invariants.md)
+   whenever the change touches market data, features, strategies, models,
+   risk, execution, accounting, scheduling, backtesting or evaluation.
+6. Run the relevant checks yourself. Label each conclusion **observed** or
+   **unverified**.
+7. Report with [assets/review.template.md](assets/review.template.md).
 
-## 2. Check intent
+## Findings and verdict
 
-- Every acceptance criterion is met, with evidence.
-- Nothing required is missing; nothing unrequested was added.
-- Failure behavior and edge cases from the spec are handled.
+Severity: `critical` (breaks an `AGENTS.md` section 3 rule), `high`, `medium`,
+`low`. Each finding has evidence, location, impact and the smallest fix.
+Report only what affects correctness, the rules or the acceptance criteria;
+mark style preferences as optional.
 
-## 3. Check engineering
-
-- Correctness and regressions.
-- Simplicity: would a senior engineer call it overcomplicated?
-- Scope: every changed line traces to the task.
-- **Integrity: no test, fixture, threshold, lint rule, metric or experiment
-  criterion was weakened to pass.** Compare test changes with code changes.
-- Data integrity, compatibility, error handling and observability.
-- Docstrings and comments follow `docs/engineering/code-documentation.md`.
-- Changed Markdown follows `docs/engineering/writing-for-agents.md`.
-
-Read [references/trading-invariants.md](references/trading-invariants.md)
-whenever the change touches market data, features, strategies, models, risk,
-execution, accounting, scheduling, backtesting or evaluation.
-
-Read [references/security.md](references/security.md) only when the change
-touches authentication, untrusted input, secrets, external actions or another
-trust boundary.
-
-## 4. Validate
-
-Run the relevant checks yourself when safe. Label each conclusion as
-**observed**, **inferred from source**, or **unverified**. Passing tests alone
-never justify approval.
-
-## 5. Report
-
-Use [assets/review.template.md](assets/review.template.md). Order findings
-`critical`, `high`, `medium`, `low`; breaking an `AGENTS.md` section 3 rule is
-`critical`. Each finding has evidence, location, impact and the smallest fix.
-Report only findings that affect correctness, the rules or the stated
-requirements; mark style preferences as optional.
-
-Verdict:
-
-- `approved`: no finding requires a change, and all risk-required evidence
-  exists.
+- `approved`: nothing must change and the required evidence exists.
 - `changes-required`: at least one finding must be fixed.
 - `blocked`: evidence, access, scope or required independence is missing.
-
-An approving review supports moving the spec to `verified`.

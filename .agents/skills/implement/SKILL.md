@@ -1,64 +1,44 @@
 ---
 name: implement
-description: Implements one bounded change (one ready step from a task graph, one outcome from an approved spec or plan, or one confirmed direct-path request) in short verify loops, with tests, docstrings and recoverable state. Use when the user asks to build, code, fix or continue accepted work. Does not expand scope or start blocked work.
+description: Implements one bounded change (one task from an approved plan, or one small change the user confirmed) in short edit-and-verify loops, with tests and docstrings, ending with a pull request and evidence. Use when the user asks to build, code, fix or continue accepted work. Does not expand scope or start a task whose dependencies are not done.
 ---
 
-# Implement one bounded change
+# Implement one task
 
-Finish one outcome and leave the repository in a verifiable state.
+Finish one outcome and leave the repository green and reviewable.
 
-## 1. Select and bound
+## Steps
 
-Pick exactly one input:
+1. **Pick one input:** a `todo` task in `.work/<BLOCK-ID>-<slug>/plan.md`
+   whose dependencies are `done`, or a small change the user confirmed
+   (`AGENTS.md` section 4). Create the branch (`AGENTS.md` section 6) and set
+   the task to `in-progress`.
+2. **Read** the affected code and tests. Write the goal as checks. Stop and
+   ask on a material ambiguity; never invent a product or architecture
+   choice.
+3. **Loop:** for rules and bugs, write the failing test first and confirm it
+   fails for the expected reason; make the smallest change that passes; run
+   the narrowest useful check. Write docstrings as you go
+   ([code-documentation](../../../docs/engineering/code-documentation.md)).
+4. **Verify:** run `make check` (until F01 lands: the two harness commands)
+   and compare the behavior with each acceptance criterion of the task.
+5. **Close:** commit, push, open the pull request with the commands and
+   results, and set the task to `done` once merged. For a `critical` task,
+   request the independent review before merge. If you stop early, write
+   what is done, what is next and the exact state into the plan's task row.
 
-- a `ready` step from `.work/<BLOCK-ID>-<slug>/tasks.md`: confirm every
-  dependency is `done`, then set it to `in-progress`;
-- one decision-complete outcome from an approved spec or plan;
-- a direct-path request: confirm it meets the direct-path row in `AGENTS.md`
-  section 4 and state `Intent`, `Change` and `Verification` before editing.
+## Project test rules
 
-Read the affected code and tests first. Write the goal as steps with checks
-(`AGENTS.md` section 2, rule 4). Stop on a material ambiguity; never invent a
-product or architecture choice.
+- Property tests (Hypothesis) for invariants: cash and position
+  conservation, no negative cash or holdings, idempotent replay, exclusion of
+  inputs with `available_at` after the decision time.
+- Every time rule is tested at the boundary: data available exactly at the
+  decision time (allowed) and one tick later (rejected).
+- No network or wall clock: inject the clock and providers; adapters are
+  tested against recorded fixtures labeled as fixtures.
+- Assert exact `Decimal` equality; never approximate.
+- Models run through the mock or replay adapter; live calls are opt-in tests.
 
-## 2. Execute
-
-- Make the smallest coherent change; follow existing patterns; leave unrelated
-  code untouched.
-- Work in short loops: edit, run the narrowest useful check, read the result.
-- For reproducible bugs, business rules and contracts, write the failing test
-  first and confirm it fails for the expected reason.
-- Write docstrings and comments as you go, following
-  [`docs/engineering/code-documentation.md`](../../../docs/engineering/code-documentation.md).
-- Treat external input, secrets and side effects as trust boundaries.
-
-Read [references/testing.md](references/testing.md) when choosing or writing
-tests. Read [references/debugging.md](references/debugging.md) only when a
-failure is not explained by your change.
-
-If the **how** changes, update the plan; mark affected steps `stale` and rerun
-`decompose-tasks` when boundaries move. If the **what** changes, stop and ask.
-
-## 3. Verify
-
-Run all outcome-relevant checks and `python3 scripts/check_harness.py` before
-you call anything done. Compare the observed behavior with each acceptance
-criterion.
-
-Never weaken, skip or delete a failing check, test, fixture or threshold to get
-a green result. If a check seems wrong, stop and report it with evidence.
-
-## 4. Close
-
-- Record the exact commands and results in the step's `Result` (task graph) or
-  in the final report. A failing or unrun required check never supports
-  `done`.
-- After a step is `done`, move dependent steps to `ready` only when all their
-  dependencies are `done` and no decision or external blocker remains.
-- If you stop early or someone else will continue, write
-  `.work/<BLOCK-ID>-<slug>/handoff.md` from
-  [assets/handoff.template.md](assets/handoff.template.md).
-- Self-check the diff: every changed line traces to the task.
-- Report: files changed, behavior delivered, checks and results, risks, next
-  ready step. When all work for a spec is done, say it may move to
-  `implemented`.
+Never weaken, skip or delete a failing test, fixture or threshold to get a
+green result (`AGENTS.md` section 3, rule 9). If a check seems wrong, stop and
+report it with evidence.

@@ -1,8 +1,8 @@
 ## Task
 
-- Plan task: <!-- e.g. F02-T03 -->
-- Spec / plan: <!-- SPEC-F02, .work/F02-... or "direct path" -->
-- Risk: <!-- low | medium | high -->
+- Task: <!-- e.g. F02-T03, or "small change" -->
+- Spec / plan: <!-- SPEC-F02 and .work/F02-.../plan.md -->
+- Risk: <!-- normal | critical -->
 
 ## Change
 
@@ -12,20 +12,10 @@
 
 <!-- Commands run and their actual results. -->
 
-## Invariants checked
+## Section 3 rules touched
 
-- [ ] No live execution path, endpoint or credential
-- [ ] Point-in-time: no input with `available_at` after decision time
-- [ ] `Decimal` money; missing values not coerced to zero
-- [ ] Idempotent effects and replay
-- [ ] Untrusted text never reaches commands or execution
-- [ ] No test, fixture, threshold, metric or experiment criterion weakened to pass
-- [ ] Docstrings and comments follow docs/engineering/code-documentation.md
-- [ ] Not applicable (documentation or tooling only)
-- [ ] Backlog status and affected docs updated
+<!-- None, or each rule and the test that proves it. -->
 
 ## Review
 
-- Independence: <!-- independent | self-review (high risk requires independent) -->
-
-## Remaining risks and follow-up
+- Independence: <!-- independent | self-review (critical requires independent) -->

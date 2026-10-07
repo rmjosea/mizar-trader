@@ -2,15 +2,9 @@
 
 <One sentence: the verdict and the most important finding.>
 
-## Scope and evidence
-
-- Base:
-- Head or working-tree scope:
-- Authoritative intent:
-
-## Review independence
-
-`independent | self-review`
+- Base / head:
+- Source intent:
+- Independence: `independent | self-review`
 
 ## Findings
 
@@ -19,21 +13,16 @@
 - Evidence:
 - Location:
 - Impact:
-- Recommended action:
+- Smallest fix:
 
 ## Integrity
 
 Tests, fixtures, thresholds, lint rules, metrics or experiment criteria
-changed: `none | listed below with justification`
+changed: `none | listed with justification`
 
-## Intent conformance
+## Checks run
 
-| Source item | Step(s) | Evidence | Result |
-|---|---|---|---|
-
-## Verification results
-
-## Residual risks and unverified areas
+<Command and result for each.>
 
 ## Verdict
 

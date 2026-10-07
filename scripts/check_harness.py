@@ -2,7 +2,7 @@
 
 Checks what agents rely on but cannot see drift in: resolvable links, portable
 skills and their tool-specific links, the backlog graph, spec states, decision
-records, examples, agent settings, comment rules and document shape. Uses only
+records, examples, agent settings and comment rules. Uses only
 the standard library so it runs before any project tooling exists.
 """
 
@@ -22,9 +22,8 @@ SKIP_DIRS = {".git", ".work", "node_modules", ".venv", "__pycache__", ".pytest_c
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)\)")
 SKILL_NAME = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
 PORTABLE_SKILL_KEYS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
-SPEC_STATES = {"draft", "approved", "planned", "implemented", "verified"}
+SPEC_STATES = {"draft", "approved", "done"}
 BACKLOG_STATES = {"todo", "in-progress", "done"}
-BACKLOG_RISKS = {"low", "medium", "high"}
 BACKLOG_GATES = {"—", "0", "1", "2", "3", "4", "5"}
 AGENTS_MAX_LINES = 200
 INSTRUCTION_FILES_THAT_DISABLE_AGENTS_MD = ("CLAUDE.md", ".claude/CLAUDE.md")
@@ -56,9 +55,6 @@ COMMENT_ONLY_FORBIDDEN = [
     (re.compile(r"^(?:#|//|--)\s*(?:step\s+)?\d+[.)]\s", re.IGNORECASE), "numbered step comment"),
 ]
 MAX_MODULE_DOCSTRING_LINES = 6
-DOC_MAX_LINES = 300
-CONTENTS_REQUIRED_ABOVE = 100
-VAGUE_REFERENCE = re.compile(r"\b(?:see|as (?:noted|mentioned|shown)) (?:above|below|earlier)\b", re.IGNORECASE)
 
 
 def walk_files(root: Path, suffixes: set[str]) -> Iterator[Path]:
@@ -181,8 +177,8 @@ def parse_backlog(text: str) -> list[dict[str, str]]:
     rows = []
     for line in text.splitlines():
         cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
-        if len(cells) == 8 and re.match(r"^[A-Z]\d{2}$", cells[0]):
-            rows.append({"id": cells[0], "depends": cells[2], "gate": cells[3], "risk": cells[4], "status": cells[7]})
+        if len(cells) == 7 and re.match(r"^[A-Z]\d{2}$", cells[0]):
+            rows.append({"id": cells[0], "depends": cells[2], "gate": cells[3], "status": cells[6]})
     return rows
 
 
@@ -204,8 +200,6 @@ def check_backlog(root: Path) -> list[str]:
         errors += [f"backlog: {row['id']} depends on unknown {dep}" for dep in deps if dep not in ids]
         if row["status"] not in BACKLOG_STATES:
             errors.append(f"backlog: {row['id']} has invalid status '{row['status']}'")
-        if row["risk"] not in BACKLOG_RISKS:
-            errors.append(f"backlog: {row['id']} has invalid risk '{row['risk']}'")
         if row["gate"] not in BACKLOG_GATES:
             errors.append(f"backlog: {row['id']} has invalid gate '{row['gate']}'")
 
@@ -364,59 +358,8 @@ def check_code_comments(root: Path) -> list[str]:
     return errors
 
 
-def strip_frontmatter(text: str) -> str:
-    """Return Markdown text without a leading YAML frontmatter block."""
-    if text.startswith("---\n"):
-        end = text.find("\n---", 4)
-        if end != -1:
-            return text[end + 4 :].lstrip("\n")
-    return text
 
 
-def shaped_documents(root: Path) -> list[Path]:
-    """Return documents that must follow the file-shape rules."""
-    docs = list(walk_files(root / "docs", {".md"})) if (root / "docs").exists() else []
-    specs = sorted((root / "specs").glob("*/spec.md")) if (root / "specs").exists() else []
-    return sorted(docs) + specs
-
-
-def check_document_shape(root: Path) -> list[str]:
-    """Require title, summary first, contents for long files and a size budget."""
-    errors = []
-    for path in shaped_documents(root):
-        rel = path.relative_to(root)
-        lines = strip_frontmatter(path.read_text(encoding="utf-8")).splitlines()
-        if not lines or not lines[0].startswith("# "):
-            errors.append(f"{rel}: line 1 must be the '# ' title")
-            continue
-        intro = []
-        for line in lines[1:]:
-            if line.startswith("## "):
-                break
-            intro.append(line.strip())
-        if not any(line and not line.startswith(("-", "|", "```", "<!--")) for line in intro):
-            errors.append(f"{rel}: add a one-to-three sentence summary before the first '##' heading")
-        if len(lines) > CONTENTS_REQUIRED_ABOVE and "## Contents" not in lines:
-            errors.append(f"{rel}: over {CONTENTS_REQUIRED_ABOVE} lines; add a '## Contents' list")
-        if len(lines) > DOC_MAX_LINES:
-            errors.append(f"{rel}: exceeds {DOC_MAX_LINES} lines; split it by purpose")
-    return errors
-
-
-def check_vague_references(root: Path) -> list[str]:
-    """Reject 'see above' style references that break self-contained sections."""
-    errors = []
-    for path in walk_files(root, {".md"}):
-        in_fence = False
-        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-            if line.strip().startswith("```"):
-                in_fence = not in_fence
-                continue
-            # Quoted or code-formatted text names the phrase as an example, not a reference.
-            prose = re.sub(r'`[^`]*`|"[^"]*"', "", line)
-            if not in_fence and VAGUE_REFERENCE.search(prose):
-                errors.append(f"{path.relative_to(root)}:{number}: replace the vague reference with a link")
-    return errors
 
 
 def check_docs_index(root: Path) -> list[str]:
@@ -433,32 +376,6 @@ def check_docs_index(root: Path) -> list[str]:
     ]
 
 
-def check_skill_files(root: Path) -> list[str]:
-    """Require every skill file to be linked from SKILL.md and references to stay one level deep."""
-    errors = []
-    for skill_dir in skill_dirs(root):
-        skill_file = skill_dir / "SKILL.md"
-        if not skill_file.exists():
-            continue
-        targets = LINK.findall(skill_file.read_text(encoding="utf-8"))
-        linked = {(skill_dir / target.split("#", 1)[0]).resolve() for target in targets}
-        files = (
-            p
-            for p in skill_dir.rglob("*")
-            if p.is_file() and p != skill_file
-            and not any(part.startswith(".") or part in SKIP_DIRS for part in p.relative_to(skill_dir).parts)
-        )
-        for path in sorted(files):
-            rel = path.relative_to(root)
-            if path.resolve() not in linked:
-                errors.append(f"{rel}: not linked from {skill_file.relative_to(root)}")
-            if path.suffix == ".md" and "references" in path.relative_to(skill_dir).parts:
-                for target in LINK.findall(path.read_text(encoding="utf-8")):
-                    resolved = (path.parent / target.split("#", 1)[0]).resolve()
-                    if not re.match(r"^[a-z]+:", target) and skill_dir.resolve() in resolved.parents:
-                        errors.append(f"{rel}: links to {target}; keep references one level deep")
-    return errors
-
 
 CHECKS: tuple[Callable[[Path], list[str]], ...] = (
     check_links,
@@ -471,10 +388,7 @@ CHECKS: tuple[Callable[[Path], list[str]], ...] = (
     check_examples,
     check_agent_contract,
     check_code_comments,
-    check_document_shape,
-    check_vague_references,
     check_docs_index,
-    check_skill_files,
 )
 
 

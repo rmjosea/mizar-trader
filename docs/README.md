@@ -28,8 +28,8 @@ How to resolve a conflict:
   stop and ask; never edit a higher source to match the code.
 - **A source at levels 1–4 looks wrong**: stop and ask. Changing levels 1–3
   needs explicit human approval; a spec that needs such a change amends that
-  source first. A wrong approved spec goes back to `write-spec` for
-  re-approval.
+  source first. A wrong approved spec goes back to the `spec` skill
+  for re-approval.
 - **The baseline contradicts code or a spec**: update the baseline document in
   the same change.
 

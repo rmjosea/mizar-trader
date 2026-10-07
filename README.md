@@ -20,11 +20,11 @@ and others) implements one plan task of a backlog block at a time under the sing
 [`.agents/skills/`](.agents/skills/):
 
 ```text
-shape-idea -> write-spec -> plan -> decompose-tasks -> implement -> review
+spec -> plan -> implement -> review
 ```
 
-High-risk changes (contracts, ledger, risk, execution, scheduling, security)
-require an independent review by an agent that did not write the change, or by
+Critical changes (ledger, risk, execution, point-in-time data, secrets, new
+dependencies) require an independent review by an agent that did not write the change, or by
 a human. Commits are authored by the human operator only.
 
 ## Where to start

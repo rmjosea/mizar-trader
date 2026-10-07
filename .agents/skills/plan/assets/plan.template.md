@@ -1,37 +1,30 @@
 ---
 id: PLAN-<BLOCK-ID>
-sources:
-  - <SPEC-<BLOCK-ID>, backlog block, or confirmed request>
+spec: SPEC-<BLOCK-ID>
 status: draft
-risk: low
-risk_rationale: <Why this level applies>
 ---
 
-# <Task> implementation plan
+# <Block> implementation plan
 
 <One or two sentences: what will be built and the chosen approach.>
 
-## Goal and source intent
-
-## Repository facts
-
-## Confirmed decisions
+## Decisions
 
 | Decision | Choice | Reason |
 |---|---|---|
 
 ## Design
 
-## Rules from AGENTS.md section 3 and how they are kept
+<Components, interfaces, data, failure handling. Only what the spec needs.>
 
-## Coverage
+## Section 3 rules touched and how they are kept
 
-| Source item | Design response | Verification |
-|---|---|---|
-| REQ-001 / AC-001 | | |
+## Tasks
 
-## Verification commands
+| Task | Outcome | Acceptance criteria | Depends | Risk | Checks | Status |
+|---|---|---|---|---|---|---|
+| <BLOCK-ID>-T01 | | AC-001 | — | normal | | todo |
 
-## Risks and mitigations
+## Risks and open questions
 
-## Open questions
+<Open questions must be `None` before approval.>

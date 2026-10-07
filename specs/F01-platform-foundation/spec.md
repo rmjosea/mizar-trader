@@ -52,7 +52,7 @@ full check suite; CI runs the same suite on every pull request without secrets.
 - Health endpoint `/health` used as the `api` container healthcheck.
 - Environment-based configuration and `.env.example`.
 - Host diagnostic `make doctor`.
-- Updates to `AGENTS.md` §8 and `03-local-runtime.md`.
+- Updates to the `AGENTS.md` Commands section and `03-local-runtime.md`.
 
 ### Out of scope
 
@@ -133,7 +133,7 @@ CI contains the value of a secret. `make doctor` names variables, never values.
 
 ### REQ-009: Documentation current
 
-`AGENTS.md` §8 lists the real commands for checks, stack start and doctor, and
+the `AGENTS.md` Commands section lists the real commands for checks, stack start and doctor, and
 `03-local-runtime.md` describes the portable runtime (see "Changes to the
 baseline docs").
 
@@ -169,7 +169,7 @@ baseline docs").
 - AC-011: THE repository SHALL contain no live-trading variable, endpoint or
   credential, and `.env.example` SHALL contain no provider or broker key.
   (REQ-006)
-- AC-012: WHEN the block is complete, `AGENTS.md` §8 SHALL list commands that
+- AC-012: WHEN the block is complete, the `AGENTS.md` Commands section SHALL list commands that
   run successfully as written. (REQ-009)
 
 ## Failure behavior and edge cases
