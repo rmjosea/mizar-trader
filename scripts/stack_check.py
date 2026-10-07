@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import socket
 import subprocess
 import sys
@@ -108,6 +109,7 @@ def main() -> int:
         if not passed:
             failures.append(label)
 
+    print(f"INFO host architecture: {platform.machine()}")
     compose("up", "-d", "--build", "--wait")
     check(True, "stack started and reported healthy")
 
