@@ -53,9 +53,11 @@ tests/harness/       tests for the repository checks
 ## Checks
 
 ```sh
-python3 scripts/check_harness.py
-python3 -m unittest discover -s tests/harness
+make check
 ```
+
+It runs exactly what CI runs; the other commands are in the
+[`AGENTS.md`](AGENTS.md) Commands section.
 
 ## Disclaimer
 

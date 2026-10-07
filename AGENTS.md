@@ -85,9 +85,9 @@ before the code.
 
 | Purpose | Command |
 |---|---|
-| Harness and documentation check | `python3 scripts/check_harness.py` |
-| Harness tests | `python3 -m unittest discover -s tests/harness` |
-| App lint, types, tests | defined by backlog block F01 (`make check`); update this table then |
+| Every check CI runs (sync, format, lint, types, imports, tests, audit, harness) | `make check` |
+| One test file while iterating | `uv run pytest tests/<file>.py` |
+| Harness and documentation check only | `uv run python scripts/check_harness.py` |
 
 Standards, read when writing that kind of file:
 [Python](docs/engineering/python.md),
@@ -112,7 +112,7 @@ Standards, read when writing that kind of file:
 ## 7. Definition of done
 
 - Every acceptance criterion has evidence: the command run and its result.
-- `make check` (or, until F01 lands, the two harness commands) passes.
+- `make check` passes.
 - Critical work has an independent review with verdict `approved`.
 - Docs, spec status and backlog status match the change.
 - The final report lists commands and results, skipped checks, assumptions

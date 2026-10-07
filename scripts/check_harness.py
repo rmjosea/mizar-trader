@@ -18,25 +18,57 @@ import tokenize
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
-SKIP_DIRS = {".git", ".work", "node_modules", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache", ".mypy_cache"}
+SKIP_DIRS = {
+    ".git",
+    ".work",
+    "node_modules",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".mypy_cache",
+}
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)\)")
 SKILL_NAME = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
-PORTABLE_SKILL_KEYS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
+PORTABLE_SKILL_KEYS = {
+    "name",
+    "description",
+    "license",
+    "compatibility",
+    "metadata",
+    "allowed-tools",
+}
 SPEC_STATES = {"draft", "approved", "done"}
 BACKLOG_STATES = {"todo", "in-progress", "done"}
 BACKLOG_GATES = {"—", "0", "1", "2", "3", "4", "5"}
 AGENTS_MAX_LINES = 200
 INSTRUCTION_FILES_THAT_DISABLE_AGENTS_MD = ("CLAUDE.md", ".claude/CLAUDE.md")
 
-CODE_SUFFIXES = {".py", ".ts", ".tsx", ".js", ".jsx", ".sql", ".sh", ".yml", ".yaml", ".toml"}
+CODE_SUFFIXES = {
+    ".py",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".sql",
+    ".sh",
+    ".yml",
+    ".yaml",
+    ".toml",
+}
 HASH_COMMENT_SUFFIXES = {".sh", ".yml", ".yaml", ".toml"}
 AI_AUTHOR = r"(?:Claude|Codex|ChatGPT|Copilot|GPT[-\w.]*|Gemini|an? (?:AI|LLM|agent|assistant)|AI)\b"
-AUTHORSHIP_VERB = r"(?:auto-?)?(?:generated|written|authored|created) (?:by|with|using) "
+AUTHORSHIP_VERB = (
+    r"(?:auto-?)?(?:generated|written|authored|created) (?:by|with|using) "
+)
 CODE_SUBJECT = r"(?:file|module|code|class|function|script)"
 FORBIDDEN_IN_COMMENTS = [
     (re.compile(r"\b(?:SPEC|REQ|PLAN|TASK|OD|AC)-[A-Z0-9]"), "workflow ID"),
     (
-        re.compile(r"\b(?:issue|pr|pull request|ticket|see|fixes|closes|resolves)\s*#\s*\d+|\bGH-\d+\b", re.IGNORECASE),
+        re.compile(
+            r"\b(?:issue|pr|pull request|ticket|see|fixes|closes|resolves)\s*#\s*\d+|\bGH-\d+\b",
+            re.IGNORECASE,
+        ),
         "issue reference",
     ),
     (
@@ -52,7 +84,10 @@ FORBIDDEN_IN_COMMENTS = [
 ]
 COMMENT_ONLY_FORBIDDEN = [
     (re.compile(r"^(?:#|//|--|/\*|\*)\s*[-=*#~_]{4,}"), "banner or divider comment"),
-    (re.compile(r"^(?:#|//|--)\s*(?:step\s+)?\d+[.)]\s", re.IGNORECASE), "numbered step comment"),
+    (
+        re.compile(r"^(?:#|//|--)\s*(?:step\s+)?\d+[.)]\s", re.IGNORECASE),
+        "numbered step comment",
+    ),
 ]
 MAX_MODULE_DOCSTRING_LINES = 6
 
@@ -60,7 +95,11 @@ MAX_MODULE_DOCSTRING_LINES = 6
 def walk_files(root: Path, suffixes: set[str]) -> Iterator[Path]:
     """Yield repository files with the given suffixes, never following symlinks."""
     for directory, dirnames, filenames in os.walk(root, followlinks=False):
-        dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS and not (Path(directory) / d).is_symlink()]
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d not in SKIP_DIRS and not (Path(directory) / d).is_symlink()
+        ]
         for filename in sorted(filenames):
             path = Path(directory) / filename
             if path.suffix in suffixes and not path.is_symlink():
@@ -84,9 +123,11 @@ def parse_frontmatter(text: str) -> dict[str, str] | None:
 
 def check_links(root: Path) -> list[str]:
     """Report relative Markdown links whose target does not exist."""
-    errors = []
+    errors: list[str] = []
     for path in walk_files(root, {".md"}):
-        text = re.sub(r"```.*?```", "", path.read_text(encoding="utf-8"), flags=re.DOTALL)
+        text = re.sub(
+            r"```.*?```", "", path.read_text(encoding="utf-8"), flags=re.DOTALL
+        )
         for target in LINK.findall(text):
             if re.match(r"^[a-z]+:", target) or target.startswith("#"):
                 continue
@@ -101,12 +142,16 @@ def check_links(root: Path) -> list[str]:
 def skill_dirs(root: Path) -> list[Path]:
     """Return canonical skill directories under .agents/skills."""
     base = root / ".agents" / "skills"
-    return sorted(p for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")) if base.exists() else []
+    return (
+        sorted(p for p in base.iterdir() if p.is_dir() and not p.name.startswith("."))
+        if base.exists()
+        else []
+    )
 
 
 def check_skills(root: Path) -> list[str]:
     """Validate each skill against the portable Agent Skills rules."""
-    errors = []
+    errors: list[str] = []
     for skill_dir in skill_dirs(root):
         rel = skill_dir.relative_to(root)
         skill_file = skill_dir / "SKILL.md"
@@ -120,13 +165,17 @@ def check_skills(root: Path) -> list[str]:
             continue
         name, description = meta.get("name", ""), meta.get("description", "")
         if name != skill_dir.name:
-            errors.append(f"{rel}/SKILL.md: name '{name}' must equal the directory name")
+            errors.append(
+                f"{rel}/SKILL.md: name '{name}' must equal the directory name"
+            )
         if not SKILL_NAME.match(name) or "--" in name:
             errors.append(f"{rel}/SKILL.md: invalid name '{name}'")
         if not description or len(description) > 1024:
             errors.append(f"{rel}/SKILL.md: description must be 1-1024 characters")
         if re.match(r"^(I|You|We)\b", description):
-            errors.append(f"{rel}/SKILL.md: description must be written in the third person")
+            errors.append(
+                f"{rel}/SKILL.md: description must be written in the third person"
+            )
         extra = sorted(set(meta) - PORTABLE_SKILL_KEYS)
         if extra:
             errors.append(f"{rel}/SKILL.md: non-portable frontmatter keys {extra}")
@@ -137,25 +186,33 @@ def check_skills(root: Path) -> list[str]:
 
 def check_skill_links(root: Path) -> list[str]:
     """Require one symlink in .claude/skills per canonical skill, and nothing else."""
-    errors = []
+    errors: list[str] = []
     claude_dir = root / ".claude" / "skills"
     canonical = {p.name for p in skill_dirs(root)}
-    linked = {p.name for p in claude_dir.iterdir() if not p.name.startswith(".")} if claude_dir.exists() else set()
+    linked: set[str] = (
+        {p.name for p in claude_dir.iterdir() if not p.name.startswith(".")}
+        if claude_dir.exists()
+        else set()
+    )
     for name in sorted(canonical - linked):
         errors.append(f".claude/skills/{name}: missing link to .agents/skills/{name}")
     for name in sorted(linked):
         link = claude_dir / name
         target = root / ".agents" / "skills" / name
         if not link.is_symlink():
-            errors.append(f".claude/skills/{name}: must be a symlink; keep skills in .agents/skills")
+            errors.append(
+                f".claude/skills/{name}: must be a symlink; keep skills in .agents/skills"
+            )
         elif name not in canonical or link.resolve() != target.resolve():
-            errors.append(f".claude/skills/{name}: symlink must point to ../../.agents/skills/{name}")
+            errors.append(
+                f".claude/skills/{name}: symlink must point to ../../.agents/skills/{name}"
+            )
     return errors
 
 
 def check_subagents(root: Path) -> list[str]:
     """Validate subagent frontmatter and the skills they preload."""
-    errors = []
+    errors: list[str] = []
     agents_dir = root / ".claude" / "agents"
     for path in sorted(agents_dir.glob("*.md")) if agents_dir.exists() else []:
         rel = path.relative_to(root)
@@ -165,7 +222,9 @@ def check_subagents(root: Path) -> list[str]:
             errors.append(f"{rel}: frontmatter needs name and description")
             continue
         header = text.split("\n---", 1)[0]
-        block = re.search(r"^skills:\s*\n((?:\s+-\s+[\w-]+\s*\n?)+)", header, re.MULTILINE)
+        block = re.search(
+            r"^skills:\s*\n((?:\s+-\s+[\w-]+\s*\n?)+)", header, re.MULTILINE
+        )
         for skill in re.findall(r"-\s+([\w-]+)", block.group(1)) if block else []:
             if not (root / ".agents" / "skills" / skill / "SKILL.md").exists():
                 errors.append(f"{rel}: preloads unknown skill '{skill}'")
@@ -174,11 +233,18 @@ def check_subagents(root: Path) -> list[str]:
 
 def parse_backlog(text: str) -> list[dict[str, str]]:
     """Extract backlog rows from the Markdown task table."""
-    rows = []
+    rows: list[dict[str, str]] = []
     for line in text.splitlines():
         cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
         if len(cells) == 7 and re.match(r"^[A-Z]\d{2}$", cells[0]):
-            rows.append({"id": cells[0], "depends": cells[2], "gate": cells[3], "status": cells[6]})
+            rows.append(
+                {
+                    "id": cells[0],
+                    "depends": cells[2],
+                    "gate": cells[3],
+                    "status": cells[6],
+                }
+            )
     return rows
 
 
@@ -190,14 +256,25 @@ def check_backlog(root: Path) -> list[str]:
     rows = parse_backlog(path.read_text(encoding="utf-8"))
     if not rows:
         return ["docs/delivery/01-backlog.md: no tasks found"]
-    errors = []
+    errors: list[str] = []
     ids = [row["id"] for row in rows]
-    errors += [f"backlog: duplicate task {task}" for task in sorted({t for t in ids if ids.count(t) > 1})]
+    errors += [
+        f"backlog: duplicate task {task}"
+        for task in sorted({t for t in ids if ids.count(t) > 1})
+    ]
     graph: dict[str, list[str]] = {}
     for row in rows:
-        deps = [] if row["depends"] in {"—", "-", ""} else [d.strip() for d in row["depends"].split(",")]
+        deps = (
+            []
+            if row["depends"] in {"—", "-", ""}
+            else [d.strip() for d in row["depends"].split(",")]
+        )
         graph[row["id"]] = deps
-        errors += [f"backlog: {row['id']} depends on unknown {dep}" for dep in deps if dep not in ids]
+        errors += [
+            f"backlog: {row['id']} depends on unknown {dep}"
+            for dep in deps
+            if dep not in ids
+        ]
         if row["status"] not in BACKLOG_STATES:
             errors.append(f"backlog: {row['id']} has invalid status '{row['status']}'")
         if row["gate"] not in BACKLOG_GATES:
@@ -224,7 +301,7 @@ def check_backlog(root: Path) -> list[str]:
 
 def check_specs(root: Path) -> list[str]:
     """Check spec IDs, lifecycle states and their presence in the index."""
-    errors = []
+    errors: list[str] = []
     specs_dir = root / "specs"
     index_path = specs_dir / "README.md"
     index = index_path.read_text(encoding="utf-8") if index_path.exists() else ""
@@ -243,9 +320,13 @@ def check_specs(root: Path) -> list[str]:
 
 def check_decisions(root: Path) -> list[str]:
     """Require every decision record to declare its status."""
-    errors = []
+    errors: list[str] = []
     for adr in sorted((root / "docs" / "decisions").glob("[0-9][0-9][0-9][0-9]-*.md")):
-        if not re.search(r"^- Status: (proposed|accepted|superseded|deprecated)", adr.read_text(encoding="utf-8"), re.MULTILINE):
+        if not re.search(
+            r"^- Status: (proposed|accepted|superseded|deprecated)",
+            adr.read_text(encoding="utf-8"),
+            re.MULTILINE,
+        ):
             errors.append(f"{adr.relative_to(root)}: missing '- Status:' line")
     return errors
 
@@ -271,15 +352,19 @@ def check_examples(root: Path) -> list[str]:
 
 def check_agent_contract(root: Path) -> list[str]:
     """Keep AGENTS.md loadable by every agent and agent attribution disabled."""
-    errors = []
+    errors: list[str] = []
     agents = root / "AGENTS.md"
     if not agents.exists():
         errors.append("AGENTS.md: missing")
     elif len(agents.read_text(encoding="utf-8").splitlines()) > AGENTS_MAX_LINES:
-        errors.append(f"AGENTS.md: exceeds {AGENTS_MAX_LINES} lines; move detail to docs/ or a skill")
+        errors.append(
+            f"AGENTS.md: exceeds {AGENTS_MAX_LINES} lines; move detail to docs/ or a skill"
+        )
     for name in INSTRUCTION_FILES_THAT_DISABLE_AGENTS_MD:
         if (root / name).exists():
-            errors.append(f"{name}: remove it; its presence stops Claude Code from loading AGENTS.md")
+            errors.append(
+                f"{name}: remove it; its presence stops Claude Code from loading AGENTS.md"
+            )
     settings = root / ".claude" / "settings.json"
     if settings.exists():
         try:
@@ -288,9 +373,13 @@ def check_agent_contract(root: Path) -> list[str]:
             return errors + [f".claude/settings.json: invalid JSON ({exc.msg})"]
         attribution = config.get("attribution", {})
         if attribution.get("commit") != "" or attribution.get("pr") != "":
-            errors.append(".claude/settings.json: attribution.commit and attribution.pr must be empty strings")
+            errors.append(
+                ".claude/settings.json: attribution.commit and attribution.pr must be empty strings"
+            )
         if config.get("includeGitInstructions") is not False:
-            errors.append(".claude/settings.json: includeGitInstructions must be false; AGENTS.md owns git rules")
+            errors.append(
+                ".claude/settings.json: includeGitInstructions must be false; AGENTS.md owns git rules"
+            )
     return errors
 
 
@@ -303,7 +392,9 @@ def python_comment_texts(path: Path) -> list[tuple[int, str, bool]]:
         if token.type == tokenize.COMMENT
     ]
     for node in ast.walk(ast.parse(source)):
-        if isinstance(node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef):
+        if isinstance(
+            node, ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+        ):
             docstring = ast.get_docstring(node, clean=False)
             if docstring:
                 texts.append((getattr(node, "lineno", 1), docstring, False))
@@ -318,8 +409,10 @@ def other_comment_texts(path: Path) -> list[tuple[int, str, bool]]:
         markers = ("--",)
     else:
         markers = ("//", "/*", "*")
-    texts = []
-    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+    texts: list[tuple[int, str, bool]] = []
+    for number, line in enumerate(
+        path.read_text(encoding="utf-8").splitlines(), start=1
+    ):
         stripped = line.strip()
         if stripped.startswith(markers) and not stripped.startswith("#!"):
             texts.append((number, stripped, True))
@@ -329,23 +422,33 @@ def other_comment_texts(path: Path) -> list[tuple[int, str, bool]]:
 def backlog_id_pattern(root: Path) -> re.Pattern[str] | None:
     """Build a pattern matching the backlog task IDs that exist today."""
     path = root / "docs" / "delivery" / "01-backlog.md"
-    ids = [row["id"] for row in parse_backlog(path.read_text(encoding="utf-8"))] if path.exists() else []
+    ids = (
+        [row["id"] for row in parse_backlog(path.read_text(encoding="utf-8"))]
+        if path.exists()
+        else []
+    )
     return re.compile(r"\b(?:" + "|".join(ids) + r")\b") if ids else None
 
 
 def check_code_comments(root: Path) -> list[str]:
     """Enforce the code-documentation prohibitions on comments and docstrings."""
-    errors = []
+    errors: list[str] = []
     backlog_ids = backlog_id_pattern(root)
     for path in walk_files(root, CODE_SUFFIXES):
         rel = path.relative_to(root)
         try:
-            texts = python_comment_texts(path) if path.suffix == ".py" else other_comment_texts(path)
+            texts = (
+                python_comment_texts(path)
+                if path.suffix == ".py"
+                else other_comment_texts(path)
+            )
         except (SyntaxError, UnicodeDecodeError, tokenize.TokenError) as exc:
             errors.append(f"{rel}: cannot parse ({type(exc).__name__})")
             continue
         for line, text, is_comment in texts:
-            rules = FORBIDDEN_IN_COMMENTS + (COMMENT_ONLY_FORBIDDEN if is_comment else [])
+            rules = FORBIDDEN_IN_COMMENTS + (
+                COMMENT_ONLY_FORBIDDEN if is_comment else []
+            )
             if backlog_ids:
                 rules = [*rules, (backlog_ids, "backlog task ID")]
             for pattern, label in rules:
@@ -353,13 +456,14 @@ def check_code_comments(root: Path) -> list[str]:
                     errors.append(f"{rel}:{line}: {label} in a comment or docstring")
         if path.suffix == ".py":
             module_doc = ast.get_docstring(ast.parse(path.read_text(encoding="utf-8")))
-            if module_doc and len(module_doc.strip().splitlines()) > MAX_MODULE_DOCSTRING_LINES:
-                errors.append(f"{rel}: module docstring exceeds {MAX_MODULE_DOCSTRING_LINES} lines")
+            if (
+                module_doc
+                and len(module_doc.strip().splitlines()) > MAX_MODULE_DOCSTRING_LINES
+            ):
+                errors.append(
+                    f"{rel}: module docstring exceeds {MAX_MODULE_DOCSTRING_LINES} lines"
+                )
     return errors
-
-
-
-
 
 
 def check_docs_index(root: Path) -> list[str]:
@@ -368,13 +472,14 @@ def check_docs_index(root: Path) -> list[str]:
     if not index_path.exists():
         return ["docs/README.md: missing documentation index"]
     targets = LINK.findall(index_path.read_text(encoding="utf-8"))
-    listed = {(index_path.parent / target.split("#", 1)[0]).resolve() for target in targets}
+    listed = {
+        (index_path.parent / target.split("#", 1)[0]).resolve() for target in targets
+    }
     return [
         f"{path.relative_to(root)}: not listed in docs/README.md"
         for path in walk_files(root / "docs", {".md"})
         if path != index_path and path.resolve() not in listed
     ]
-
 
 
 CHECKS: tuple[Callable[[Path], list[str]], ...] = (
