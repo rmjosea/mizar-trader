@@ -1,7 +1,7 @@
 # Assessment: <name>
 
 - Intended use: `reference-only | isolated-benchmark | optional-plugin | runtime-dependency`
-- Backlog task: <TASK-ID>
+- Backlog block: <BLOCK-ID>
 - Assessed on: <YYYY-MM-DD>
 
 ## Identity and provenance

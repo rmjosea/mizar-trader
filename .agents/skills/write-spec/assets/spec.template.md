@@ -1,5 +1,5 @@
 ---
-id: SPEC-<TASK-ID>
+id: SPEC-<BLOCK-ID>
 title: <Capability name>
 status: draft
 depends_on: []
@@ -11,7 +11,7 @@ depends_on: []
 
 ## Context
 
-<Why this matters now. Link the backlog task and the baseline docs used.>
+<Why this matters now. Link the backlog block and the baseline docs used.>
 
 ## Outcome
 

@@ -16,7 +16,7 @@ Modular monolith ([ADR-0001](../decisions/0001-modular-monolith.md)):
 - **Parquet/DuckDB**: partitioned time series and analytical reads.
 - **web**: React/Vite dashboard.
 
-Stack: Python 3.12+, uv, FastAPI, Pydantic v2, PostgreSQL, Parquet/DuckDB,
+Stack: Python 3.14 ([OD-07](../product/open-decisions.md)), uv, FastAPI, Pydantic v2, PostgreSQL, Parquet/DuckDB,
 React/Vite, Docker Compose (ARM64). PydanticAI is optional inside the AI
 adapter only. No message broker or microservices until a measured need exists.
 

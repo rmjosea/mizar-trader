@@ -1,7 +1,7 @@
 ---
-id: PLAN-<TASK-ID>
+id: PLAN-<BLOCK-ID>
 sources:
-  - <SPEC-<TASK-ID>, backlog task, or confirmed request>
+  - <SPEC-<BLOCK-ID>, backlog block, or confirmed request>
 status: draft
 risk: low
 risk_rationale: <Why this level applies>

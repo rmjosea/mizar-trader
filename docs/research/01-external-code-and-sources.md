@@ -35,9 +35,9 @@ results.
 | [TradingAgents](https://github.com/TauricResearch/TradingAgents) | reference, isolated benchmark | multi-agent research scaffold; no fixed reproducible returns |
 | [FinRL](https://github.com/AI4Finance-Foundation/FinRL) / [FinRL-Trading](https://github.com/AI4Finance-Foundation/FinRL-Trading) | later RL benchmark | upstream points production work to newer branches; review each independently |
 | [Freqtrade](https://github.com/freqtrade/freqtrade) and [FreqAI](https://www.freqtrade.io/en/stable/freqai/) | architecture reference | do not mix its fills with ours without calibration |
-| [vectorbt](https://github.com/polakowo/vectorbt) | optional cross-check (B02) | not the authoritative event or ledger engine |
+| [vectorbt](https://github.com/polakowo/vectorbt) | optional cross-check (B01) | not the authoritative event or ledger engine |
 | [Fin-JEPA](https://github.com/cedricwyh/fin-jepa) | optional representation research | no live alpha evidence |
-| Jev by TypeSafe ([announcement](https://typesafe.ai/blog/introducing-system-one-models-and-jev)) | capability-gated adapter (A03) | announced 2026-09-15, early access; vendor claims unverified; third-party "Jev trading" repositories need provenance checks |
+| Jev by TypeSafe ([announcement](https://typesafe.ai/blog/introducing-system-one-models-and-jev)) | capability-gated adapter (A01) | announced 2026-09-15, early access; vendor claims unverified; third-party "Jev trading" repositories need provenance checks |
 
 ## Data and broker sources
 

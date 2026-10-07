@@ -54,4 +54,4 @@ fabricated signals.
 
 ## Backlog
 
-I01, I02, I03.
+I01 (archive and social adapter), A01 (structured signal extraction).

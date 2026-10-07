@@ -1,6 +1,6 @@
 ---
 name: write-spec
-description: Writes or updates a product specification that defines what a backlog task must do, with observable, testable acceptance criteria, using the baseline docs as input. Use after an understanding is confirmed, or when the user asks to write, split, update or approve a spec. Not for implementation design, which belongs to the plan skill.
+description: Writes or updates a product specification that defines what a backlog functional block must do, with observable, testable acceptance criteria, using the baseline docs as input. Use after an understanding is confirmed, or when the user asks to write, split, update or approve a spec. Not for implementation design, which belongs to the plan skill.
 ---
 
 # Write a specification
@@ -12,7 +12,7 @@ implementation choices unless they are confirmed constraints.
 
 - An approved shared understanding, or an equally clear request. If a material
   question remains, return to `shape-idea`.
-- A backlog task ID. If the work has none, propose a new backlog row (ID,
+- A backlog block ID. If the work has none, propose a new backlog row (ID,
   outcome, dependencies, gate, risk) and get it confirmed first.
 
 ## Steps
@@ -22,7 +22,7 @@ implementation choices unless they are confirmed constraints.
 2. List any point where the spec extends or changes the baseline. Each one
    needs confirmation and an update to the affected document in the same
    change.
-3. Write `specs/<TASK-ID>-<slug>/spec.md` from
+3. Write `specs/<BLOCK-ID>-<slug>/spec.md` from
    [assets/spec.template.md](assets/spec.template.md). Delete sections that add
    nothing.
 4. Add or update the row in `specs/README.md`
@@ -65,4 +65,4 @@ code second.
 - Terms match the glossary in `docs/contracts/00-domain-model.md`.
 - No implementation preference is disguised as a requirement.
 - Open questions are listed and block planning when material.
-- Frontmatter has `id: SPEC-<TASK-ID>`, a valid `status` and `depends_on`.
+- Frontmatter has `id: SPEC-<BLOCK-ID>`, a valid `status` and `depends_on`.

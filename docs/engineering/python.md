@@ -34,12 +34,12 @@ follows [`ai-model-code.md`](ai-model-code.md).
 
 ## 2. Toolchain and project layout
 
-Backlog task F01 creates this setup; the commands then go in `AGENTS.md`
+Backlog block F01 creates this setup; the commands then go in `AGENTS.md`
 section 8.
 
 | Concern | Tool and rule |
 |---|---|
-| Interpreter | Python 3.14 recommended ([OD-07](../product/open-decisions.md)); pinned in `.python-version` and `requires-python`; CI reads `.python-version` |
+| Interpreter | Python 3.14 ([OD-07](../product/open-decisions.md), resolved); pinned in `.python-version` and `requires-python`; CI reads `.python-version` |
 | Environments and dependencies | `uv`; `uv.lock` is committed; CI runs `uv sync --locked` |
 | Development tools | `[dependency-groups]` (PEP 735), not optional extras |
 | Lint and format | Ruff: `ruff format` and `ruff check`, version pinned |

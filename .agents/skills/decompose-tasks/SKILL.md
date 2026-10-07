@@ -1,6 +1,6 @@
 ---
 name: decompose-tasks
-description: Splits an approved plan into an ordered, traceable graph of small implementation steps with dependencies, risk, conflicts and safe parallelism, written to .work/. Use when a plan needs several sessions or agents, or the user asks to break work down or schedule it. Does not redesign the solution or write code.
+description: Splits an approved plan into an ordered, traceable graph of small implementation steps with dependencies, risk, conflicts and safe parallelism, written to .work/. Use after every approved plan, or when the user asks to break work down or schedule it. Does not redesign the solution or write code.
 ---
 
 # Decompose an approved plan
@@ -28,8 +28,9 @@ decisions or change production code.
 ## Write
 
 Use [assets/tasks.template.md](assets/tasks.template.md) and write
-`.work/<TASK-ID>-<slug>/tasks.md`. Step IDs are `<TASK-ID>-T01`, `-T02`, and so
-on.
+`.work/<BLOCK-ID>-<slug>/tasks.md`. Step IDs are `<BLOCK-ID>-T01`, `-T02`, and so
+on. Each step is one task: one branch and one pull request (`AGENTS.md`
+section 9).
 
 - States: `blocked`, `ready`, `in-progress`, `done`, `stale`.
 - Only dependency-free, decision-complete steps start as `ready`.

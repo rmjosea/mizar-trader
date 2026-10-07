@@ -30,4 +30,4 @@ The toy ledger reconciles and the run is reproducible from pinned artifacts.
 
 ## Backlog
 
-B01, B02.
+B01.

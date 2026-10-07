@@ -67,8 +67,8 @@ Rules:
 | Knowledge needed for some tasks | a document in `docs/`, listed in `docs/README.md` |
 | A binding schema, event or interface | `docs/contracts/` |
 | A decision and its reasons | `docs/decisions/` (ADR) |
-| What one task must deliver | `specs/<TASK-ID>-<slug>/spec.md` |
-| How and in what order, progress, handoff | `.work/<TASK-ID>-<slug>/` |
+| What one functional block must deliver | `specs/<BLOCK-ID>-<slug>/spec.md` |
+| How and in what order, progress, handoff | `.work/<BLOCK-ID>-<slug>/` |
 | Anything the agent can derive from the code | nowhere; do not write it |
 
 ## 4. File shape and budgets
@@ -156,7 +156,7 @@ Bad:  As noted above, this must also be idempotent.
 - If an agent keeps ignoring a rule, the file is probably too long or the rule
   is buried: shorten the file or move the rule up a level. If agents keep
   asking something a file answers, its wording is ambiguous.
-- In long tasks, keep progress and decisions in `.work/<TASK-ID>-<slug>/`
+- In long tasks, keep progress and decisions in `.work/<BLOCK-ID>-<slug>/`
   files, not only in the conversation; they survive context resets.
 - A subagent returns a short, structured summary, not its raw findings.
 

@@ -1,13 +1,14 @@
 # Product specifications
 
-One spec per backlog task that needs a durable acceptance contract, stored as
-`specs/<TASK-ID>-<slug>/spec.md` with ID `SPEC-<TASK-ID>`. Created through the
+One spec per backlog functional block, stored as
+`specs/<BLOCK-ID>-<slug>/spec.md` with ID `SPEC-<BLOCK-ID>`. Created through the
 `write-spec` skill.
 
 ## Capability map
 
 | ID | Capability | Status | Depends on |
 |---|---|---|---|
+| SPEC-F01 | [Platform foundation](F01-platform-foundation/spec.md) | approved | None |
 
 ## Status definitions
 

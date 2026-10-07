@@ -15,7 +15,7 @@ execution assumptions?
 ## How this repository is built
 
 Development follows an agentic workflow. Any coding agent (Claude Code, Codex
-and others) implements one backlog task at a time under the single contract in
+and others) implements one plan task of a backlog block at a time under the single contract in
 [`AGENTS.md`](AGENTS.md), using portable skills in
 [`.agents/skills/`](.agents/skills/):
 
@@ -44,7 +44,7 @@ AGENTS.md            the only always-loaded agent contract
 .agents/skills/      portable Agent Skills (source of truth)
 .claude/             Claude Code settings, subagents, and links to the skills
 docs/                binding contracts and ADRs, plus the baseline design
-specs/               approved specifications, one per backlog task
+specs/               approved specifications, one per backlog block
 examples/            reference contracts (fixtures, not results)
 scripts/             repository checks
 tests/harness/       tests for the repository checks

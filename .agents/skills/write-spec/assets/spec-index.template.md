@@ -4,7 +4,7 @@
 
 | ID | Capability | Status | Depends on |
 |---|---|---|---|
-| SPEC-<TASK-ID> | [<Capability>](<TASK-ID>-<slug>/spec.md) | draft | None |
+| SPEC-<BLOCK-ID> | [<Capability>](<BLOCK-ID>-<slug>/spec.md) | draft | None |
 
 ## Status definitions
 

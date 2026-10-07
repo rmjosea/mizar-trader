@@ -12,7 +12,7 @@ and must not trust the implementer's summary.
 
 1. Follow the preloaded `review` skill exactly. Label the review `independent`.
 2. Establish scope from git (`git diff`, `git log`) and the source intent:
-   backlog task, spec, and plan under `.work/` when present.
+   plan task, backlog block, spec, and plan under `.work/` when present.
 3. Read `.agents/skills/review/references/trading-invariants.md` for any change
    touching market data, strategies, models, risk, execution, accounting,
    scheduling, backtesting, or evaluation.

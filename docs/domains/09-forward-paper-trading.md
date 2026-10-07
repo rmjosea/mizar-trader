@@ -33,4 +33,4 @@ inspectable by decision ID.
 
 ## Backlog
 
-D04, P01, P02, O01.
+P01, U01 (operations).

@@ -25,4 +25,4 @@ Reproducible feature snapshot for equities and crypto at a fixed `as_of`.
 
 ## Backlog
 
-D05, S01.
+D01 (snapshot builder), S01 (features).

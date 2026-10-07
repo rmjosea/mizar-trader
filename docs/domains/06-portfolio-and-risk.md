@@ -52,4 +52,4 @@ identity holds.
 
 ## Backlog
 
-E01, R01, P02.
+E01 (risk gate and kill switch), P01 (independent paper portfolios).

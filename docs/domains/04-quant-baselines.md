@@ -4,14 +4,14 @@ Provide preregistered reference strategies every AI arm must beat net of costs.
 
 ## Baselines
 
-| Baseline | Task |
+| Baseline | Block |
 |---|---|
-| Cash only | S02 |
-| Buy and hold | S02 |
-| Equal weight with periodic rebalance | S02 |
-| Momentum rule with volatility cap (preregistered parameters) | S02 |
-| Mean reversion | S03 |
-| Random control | S03 |
+| Cash only | S01 |
+| Buy and hold | S01 |
+| Equal weight with periodic rebalance | S01 |
+| Momentum rule with volatility cap (preregistered parameters) | S01 |
+| Mean reversion | S01 |
+| Random control | S01 |
 
 ## Rules
 
@@ -32,4 +32,4 @@ fixtures.
 
 ## Backlog
 
-S02, S03.
+S01.

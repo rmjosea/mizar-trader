@@ -6,7 +6,7 @@ list of what Mizar Trader will build. Approved specs in
 [`specs/`](../specs/README.md) define what is built; when a spec extends or
 changes the baseline, the affected document is updated in the same change.
 
-Load documents on demand. Start from the backlog task you are working on and
+Load documents on demand. Start from the backlog block you are working on and
 follow its links; do not read the whole tree.
 
 ## Authority order
@@ -41,7 +41,7 @@ How to resolve a conflict:
 | Product | [open-decisions](product/open-decisions.md) | a choice depends on an unresolved business decision |
 | Architecture | [01-system](architecture/01-system.md) | placing code in a module or crossing a boundary |
 | Architecture | [02-storage-and-operations](architecture/02-storage-and-operations.md) | persistence, recovery, observability |
-| Architecture | [03-local-runtime](architecture/03-local-runtime.md) | Docker, resources, Apple Silicon, cloud runtime |
+| Architecture | [03-local-runtime](architecture/03-local-runtime.md) | Docker, host requirements, resources, cloud runtime |
 | Architecture | [04-security-and-live-boundary](architecture/04-security-and-live-boundary.md) | secrets, auth, external input, execution modes |
 | Decisions | [0001-modular-monolith](decisions/0001-modular-monolith.md) | adding a module, process or service |
 | Decisions | [0002-real-data-virtual-money](decisions/0002-real-data-virtual-money.md) | touching data sources or execution modes |
